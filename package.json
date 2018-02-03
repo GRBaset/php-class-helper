@@ -11,14 +11,15 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onLanguage:php"
     ],
     "main": "./out/extension",
     "contributes": {
-        "commands": [
+        "keybindings": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "php-class-helper.run",
+                "key": "ctrl+shift+c",
+                "when": "editorTextFocus && editorLangId == php"
             }
         ]
     },

@@ -6,12 +6,6 @@ function empty(collection: any[]) {
     return !collection.length
 }
 
-function immutablePop(arr) {
-    return arr.slice(0, -1)
-}
-
-
-
 export class Helper {
     editor: TextEditor;
     cursor: Position;

@@ -1,4 +1,4 @@
-import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range, Selection, window } from 'vscode';
+import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range, Selection, window, TextEditorRevealType } from 'vscode';
 import { log } from 'util';
 
 
@@ -27,7 +27,7 @@ export class Helper {
 
         this.symbols = await this.getSymbols(this.editor.document);
         if (empty(this.symbols)) {
-            window.showInformationMessage('PHP class helper - symbols are not loaded. Please wait a second.');
+            window.showInformationMessage('PHP class helper - symbols are not loaded. Please wait a couple of second for visual studio to load the symbols.');
             return;
         }
         this.activeClass = this.getClass();
@@ -44,17 +44,28 @@ export class Helper {
 
         await this.addVariables();
 
-        this.selections = this.addToSelection();
+        this.select();
 
-        this.editor.selections = this.selections;
-
+        this.updatePlaceholderName();
+    }
+    scrollIntoView(position: Position) {
+        let range = new Range(position, position);
+        this.editor.revealRange(range, TextEditorRevealType.InCenter);
+    }
+    updatePlaceholderName() {
         this.id++;
         this.placeholder = 'PROPERTY' + this.id;
     }
 
-    addToSelection() {
+    select() {
+        this.selections = this.getSelections();
+        this.editor.selections = this.selections;
+    }
+
+    getSelections() {
         let documentLine = this.editor.document.lineCount
         let start = this.activeClass.location.range.start;
+        //cant use active clase range, because the range is sometimes incorect
         let selectionPositions = this.findAllCharacters(this.placeholder,
             new Range(
                 start,
@@ -108,6 +119,8 @@ export class Helper {
             edit.insert(attribute[0], attribute[1]);
             edit.insert(assigment[0], assigment[1]);
         })
+
+        this.scrollIntoView(assigment[0]);
     }
 
     addAttribute(): [Position, string] {
@@ -230,6 +243,8 @@ export class Helper {
         this.editor.edit(edit => {
             edit.insert(position, text);
         });
+
+        this.scrollIntoView(position);
     }
 
     getProperties(): SymbolInformation[] {
@@ -246,6 +261,8 @@ export class Helper {
     addClass() {
         let snippet = new SnippetString('class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0');
         this.editor.insertSnippet(snippet, this.cursor);
+
+        this.scrollIntoView(this.cursor);
     }
 
     getClass(): SymbolInformation {

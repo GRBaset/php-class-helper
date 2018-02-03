@@ -1,9 +1,15 @@
-import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range } from 'vscode';
+import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range, Selection, window } from 'vscode';
 import { log } from 'util';
+
 
 function empty(collection: any[]) {
     return !collection.length
 }
+
+function immutablePop(arr) {
+    return arr.slice(0, -1)
+}
+
 
 
 export class Helper {
@@ -11,18 +17,25 @@ export class Helper {
     cursor: Position;
 
     symbols: SymbolInformation[];
+    selections: Selection[];
     activeClass: SymbolInformation;
     construct: SymbolInformation;
+    id = 1;
 
-    placeholder = 'PROPERTY';
+    placeholder = 'PROPERTY' + this.id;
     visibility = 'private';
 
     async run(editor, cursor) {
         this.editor = editor;
         this.cursor = cursor;
+        this.selections = [];
 
 
         this.symbols = await this.getSymbols(this.editor.document);
+        if (empty(this.symbols)) {
+            window.showInformationMessage('PHP class helper - symbols are not loaded. Please wait a second.');
+            return;
+        }
         this.activeClass = this.getClass();
         if (!this.activeClass) {
             this.addClass();
@@ -35,15 +48,68 @@ export class Helper {
             return;
         }
 
-        this.addVariables();
+        await this.addVariables();
+
+        this.selections = this.addToSelection();
+
+        this.editor.selections = this.selections;
+
+        this.id++;
+        this.placeholder = 'PROPERTY' + this.id;
     }
 
-    addVariables() {
+    addToSelection() {
+        let documentLine = this.editor.document.lineCount
+        let start = this.activeClass.location.range.start;
+        let selectionPositions = this.findAllCharacters(this.placeholder,
+            new Range(
+                start,
+                new Position(documentLine - 1, 0)
+            )
+        );
+
+        let lastSelection: Position = [...selectionPositions].pop();
+        let propertySelection = new Position(
+            lastSelection.line,
+            lastSelection.character + this.placeholder.length + 4
+        );
+
+        selectionPositions.push(propertySelection)
+
+        return selectionPositions.map(selection => {
+            return new Selection(
+                new Position(selection.line, selection.character),
+                new Position(selection.line, selection.character + this.placeholder.length)
+            )
+        })
+    }
+
+    findAllCharacters(character: string, range: Range): Position[] {
+        let characters: Position[] = [];
+        let currentLine = range.start.line;
+        let endLine = range.end.line;
+        while (currentLine <= endLine) {
+            let characterIndex = this.editor.document.lineAt(currentLine).text.indexOf(character);
+            if (characterIndex !== -1) {
+                characters.push(
+                    new Position(
+                        currentLine,
+                        characterIndex
+                    )
+                );
+            }
+
+            currentLine++;
+        }
+        return characters;
+    }
+
+    async addVariables() {
         let property: [Position, string] = this.addProperty();
         let attribute: [Position, string] = this.addAttribute();
         let assigment: [Position, string] = this.addAssignment();
 
-        this.editor.edit((edit) => {
+        await this.editor.edit((edit) => {
             edit.insert(property[0], property[1]);
             edit.insert(attribute[0], attribute[1]);
             edit.insert(assigment[0], assigment[1]);
@@ -71,7 +137,6 @@ export class Helper {
                     /\s*\$\w*[^,]\s*$/g,
                     new Range(openingBracket, closingBracket)
                 );
-                console.log(position);
 
                 text = ',\n\t\t' + text;
             }

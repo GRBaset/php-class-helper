@@ -4,6 +4,12 @@
     "description": "",
     "version": "0.0.1",
     "publisher": "predrag-nikolic",
+    "homepage": "https://github.com/predragnikolic/php-class-helper",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/predragnikolic/php-class-helper"
+    },
+    "icon": "resources/icon.png",
     "engines": {
         "vscode": "^1.19.0"
     },

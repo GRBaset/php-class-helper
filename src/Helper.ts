@@ -1,4 +1,4 @@
-import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range, Selection, window, TextEditorRevealType } from 'vscode';
+import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range, Selection, window, TextEditorRevealType, workspace } from 'vscode';
 import { log } from 'util';
 
 
@@ -21,13 +21,13 @@ export class Helper {
     id = 1;
 
     placeholder = 'PROPERTY' + this.id;
-    visibility = 'private';
+    visibility: string;
 
     async run(editor, cursor) {
         this.editor = editor;
         this.cursor = cursor;
         this.selections = [];
-
+        this.loadSettings();
 
         this.symbols = await this.getSymbols(this.editor.document);
         if (empty(this.symbols)) {
@@ -53,6 +53,11 @@ export class Helper {
         this.select();
 
         this.updatePlaceholderName();
+    }
+
+    loadSettings() {
+        let config = workspace.getConfiguration('php-class-helper');
+        this.visibility = config.get('visibility', 'private');
     }
 
     async updateSymbols() {

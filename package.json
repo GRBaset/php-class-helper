@@ -21,6 +21,18 @@
                 "key": "ctrl+shift+c",
                 "when": "editorTextFocus && editorLangId == php"
             }
+        ],
+        "configuration": [
+            {
+                "title": "PHP Class helper Configuration options",
+                "properties": {
+                    "php-class-helper.visibility": {
+                        "type": "string",
+                        "default": "private",
+                        "description": "Default visibility of a property"
+                    }
+                }
+            }
         ]
     },
     "scripts": {

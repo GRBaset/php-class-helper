@@ -30,6 +30,11 @@ export class Helper {
         this.loadSettings();
 
         this.symbols = await this.getSymbols(this.editor.document);
+        let regExClass = this.getRegExClass();
+        if (empty(this.symbols) && has(regExClass)) {
+            window.showInformationMessage('PHP Class Helper - Pleas wait a couple of seconds');
+            return;
+        }
 
         this.activeClass = this.getClass();
         if (!this.activeClass) {
@@ -53,6 +58,18 @@ export class Helper {
     loadSettings() {
         let config = workspace.getConfiguration('php-class-helper');
         this.visibility = config.get('visibility', 'private');
+    }
+
+    getRegExClass() {
+        let start = new Position(0, 0);
+        let end = new Position(
+            this.editor.document.lineCount - 1,
+            0
+        );
+        let range = new Range(start, end);
+        let classR = this.findAllCharacters('class', range);
+        return classR;
+
     }
 
     getClass(): SymbolInformation {

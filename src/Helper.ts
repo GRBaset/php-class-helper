@@ -6,6 +6,10 @@ function empty(collection: any[]) {
     return !collection.length
 }
 
+function has(collection: any[]) {
+    return !empty(collection);
+}
+
 export class Helper {
     editor: TextEditor;
     cursor: Position;
@@ -27,7 +31,7 @@ export class Helper {
 
         this.symbols = await this.getSymbols(this.editor.document);
         if (empty(this.symbols)) {
-            window.showInformationMessage('PHP class helper - symbols are not loaded. Please wait a couple of second for visual studio to load the symbols.');
+            window.showInformationMessage('PHP class helper - Please wait a couple of second for visual studio to load the symbols.');
             return;
         }
         this.activeClass = this.getClass();
@@ -137,23 +141,29 @@ export class Helper {
         let isMultilineConstructor = openingBracket.line !== closingBracket.line;
 
         let attributes = this.findAttributes();
+        let lastAttribute = [...attributes].pop();
 
         let position = closingBracket;
 
         if (isMultilineConstructor) {
-            if (empty(attributes)) {
-                console.log('not handled');
-
-            } else {
+            if (has(attributes)) {
                 position = this.findRegExInRange(
                     /\s*\$\w*[^,]\s*$/g,
                     new Range(openingBracket, closingBracket)
                 );
 
-                text = ',\n\t\t' + text;
+                if (position.line == closingBracket.line || position.line == openingBracket.line) {
+                    position = lastAttribute.location.range.end;
+                    text = ',\n\t\t' + text + '\n\t';
+                } else {
+                    text = ',\n\t\t' + text;
+                }
+            } else {
+                text = '\t' + text + '\n\t';
             }
+
         } else {
-            if (!empty(attributes)) {
+            if (has(attributes)) {
                 text = ', ' + text;
             }
         }

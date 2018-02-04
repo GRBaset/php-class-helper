@@ -1,4 +1,5 @@
 # PHP Class Helper
+Extension for Visual Studio Code
 
 ## Looking for a php companion? PHP Class Helper is the extension for you.
 

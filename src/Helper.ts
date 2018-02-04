@@ -79,7 +79,7 @@ export class Helper {
 
     getSelections() {
         let classRange = this.activeClass.location.range;
-        //cant use active clase range, because the range is sometimes incorect
+
         let selectionPositions = this.findAllCharacters(this.placeholder,
             classRange
         );

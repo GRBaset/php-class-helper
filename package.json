@@ -24,7 +24,7 @@
         "keybindings": [
             {
                 "command": "php-class-helper.run",
-                "key": "ctrl+shift+c",
+                "key": "ctrl+alt+c",
                 "when": "editorTextFocus && editorLangId == php"
             }
         ],

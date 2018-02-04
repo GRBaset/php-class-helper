@@ -5,15 +5,15 @@
 What does PHP Class Companion do? 
 * Add a class snippet if the cursor is out of the scope of another class.
 
-![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/class.gif)
+![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/class.gif)
 
 * Add a constructor if the cursor is in scope of a class and there is no other constructor.
 
-![Add Constructor](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/constructor.gif)
+![Add Constructor](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/constructor.gif)
 
 * Add properties if the cursor is in scope of a class and  if the class has a constructor
 
-![Add Properties](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/addVariables.gif)
+![Add Properties](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/addVariables.gif)
 
 ## How do you do all of that?
 The default keybinding is `ctrl+shift+c`, but you are free to change it however you like. This simple keybinding is all you need to add a class, constructor and properties.

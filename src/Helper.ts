@@ -30,10 +30,7 @@ export class Helper {
         this.loadSettings();
 
         this.symbols = await this.getSymbols(this.editor.document);
-        if (empty(this.symbols)) {
-            window.showInformationMessage('PHP class helper - Please wait a couple of second for visual studio to load the symbols.');
-            return;
-        }
+
         this.activeClass = this.getClass();
         if (!this.activeClass) {
             this.addClass();

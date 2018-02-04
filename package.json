@@ -1,7 +1,7 @@
 {
     "name": "php-class-helper",
-    "displayName": "php class helper",
-    "description": "",
+    "displayName": "PHP Class Helper",
+    "description": "Be more productive in writing php code with a simple keybinding.",
     "version": "0.0.1",
     "publisher": "predrag-nikolic",
     "homepage": "https://github.com/predragnikolic/php-class-helper",

@@ -1,33 +1,29 @@
-# Welcome to your VS Code Extension
+# PHP Class Helper
 
-## What's in the folder
-* This folder contains all of the files necessary for your extension.
-* `package.json` - this is the manifest file in which you declare your extension and command.
-The sample plugin registers a command and defines its title and command name. With this information
-VS Code can show the command in the command palette. It doesn’t yet need to load the plugin.
-* `src/extension.ts` - this is the main file where you will provide the implementation of your command.
-The file exports one function, `activate`, which is called the very first time your extension is
-activated (in this case by executing the command). Inside the `activate` function we call `registerCommand`.
-We pass the function containing the implementation of the command as the second parameter to
-`registerCommand`.
+## Looking for a php companion? PHP Class Helper is the extension for you.
 
-## Get up and running straight away
-* Press `F5` to open a new window with your extension loaded.
-* Run your command from the command palette by pressing (`Ctrl+Shift+P` or `Cmd+Shift+P` on Mac) and typing `Hello World`.
-* Set breakpoints in your code inside `src/extension.ts` to debug your extension.
-* Find output from your extension in the debug console.
+What does PHP Class Companion do? 
+* Add a class snippet if the cursor is out of the scope of another class.
 
-## Make changes
-* You can relaunch the extension from the debug toolbar after changing code in `src/extension.ts`.
-* You can also reload (`Ctrl+R` or `Cmd+R` on Mac) the VS Code window with your extension to load your changes.
+![Add Class](/php-class-helper/class.gif)
 
-## Explore the API
-* You can open the full set of our API when you open the file `node_modules/vscode/vscode.d.ts`.
+* Add a constructor if the cursor is in scope of a class and there is no other constructor.
 
-## Run tests
-* Open the debug viewlet (`Ctrl+Shift+D` or `Cmd+Shift+D` on Mac) and from the launch configuration dropdown pick `Launch Tests`.
-* Press `F5` to run the tests in a new window with your extension loaded.
-* See the output of the test result in the debug console.
-* Make changes to `test/extension.test.ts` or create new test files inside the `test` folder.
-    * By convention, the test runner will only consider files matching the name pattern `**.test.ts`.
-    * You can create folders inside the `test` folder to structure your tests any way you want.
+![Add Constructor](/php-class-helper/constructor.gif)
+
+* Add properties if the cursor is in scope of a class and  if the class has a constructor
+
+![Add Properties](/home/predrag/git/php-class-helper/addVariables.gif)
+
+## How do you do all of that?
+The default keybinding is `ctrl+shift+c`, but you are free to change it however you like. This simple keybinding is all you need to add a class, constructor and properties.
+
+## Settings
+
+In settings you can tweak the visibility of a property:
+
+`php-class-helper.visibility: "private"`
+
+## Known issues
+
+Needs a couple of second to start to work correctly.

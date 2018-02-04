@@ -47,7 +47,7 @@ export class Helper {
 
         await this.updateSymbols();
 
-        this.select();
+        this.selectProperties();
 
         this.updatePlaceholderName();
     }
@@ -72,7 +72,7 @@ export class Helper {
         this.placeholder = 'PROPERTY' + this.id;
     }
 
-    select() {
+    selectProperties() {
         this.selections = this.getSelections();
         this.editor.selections = this.selections;
     }

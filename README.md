@@ -1,65 +1,34 @@
-# php-class-helper README
+# PHP Class Helper
 
-This is the README for your extension "php-class-helper". After writing up a brief description, we recommend including the following sections.
+## Looking for a php companion? PHP Class Helper is the extension for you.
 
-## Features
+What does PHP Class Companion do? 
+* Add a class snippet if the cursor is out of the scope of another class.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/class.gif)
 
-For example if there is an image subfolder under your extension project workspace:
+* Add a constructor if the cursor is in scope of a class and there is no other constructor.
 
-\!\[feature X\]\(images/feature-x.png\)
+![Add Constructor](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/constructor.gif)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+* Add properties if the cursor is in scope of a class and  if the class has a constructor
 
-## Requirements
+![Add Properties](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/addVariables.gif)
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## How do you do all of that?
+The default keybinding is `ctrl+shift+c`, but you are free to change it however you like. This simple keybinding is all you need to add a class, constructor and properties.
 
-## Extension Settings
+## Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+You can tweak the visibility of a property:
 
-For example:
+`php-class-helper.visibility: "private"`
 
-This extension contributes the following settings:
+## Known issues
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+Needs a couple of second to start to work correctly.
 
-## Known Issues
+## Idea
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+This extension is inspired by sublime [php companion](https://github.com/erichard/SublimePHPCompanion) package. 
+Hope you like this extension :)

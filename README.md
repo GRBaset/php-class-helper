@@ -31,4 +31,4 @@ Needs a couple of second to start to work correctly.
 ## Idea
 
 This extension is inspired by sublime [php companion](https://github.com/erichard/SublimePHPCompanion) package. 
-Hope you like this extension :)
+Hope you like this :)

@@ -242,7 +242,7 @@ export class Helper {
 
 
     addConstructor() {
-        let text = '\n\tpublic function __construct()\n\t{\n\n\t}\n';
+        let text = '\n\tpublic function __construct()\n\t{\n\t}\n';
         let properties = this.getProperties();
 
         let position;

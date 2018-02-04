@@ -27,3 +27,7 @@ In settings you can tweak the visibility of a property:
 ## Known issues
 
 Needs a couple of second to start to work correctly.
+
+## Idea
+
+This extension is inspired by sublime [php companion](https://github.com/erichard/SublimePHPCompanion) package.

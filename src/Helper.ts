@@ -44,10 +44,19 @@ export class Helper {
 
         await this.addVariables();
 
+        await this.updateSymbols();
+
         this.select();
 
         this.updatePlaceholderName();
     }
+
+    async updateSymbols() {
+        this.symbols = await this.getSymbols(this.editor.document);
+        this.activeClass = this.getClass();
+        this.construct = this.getConstructor();
+    }
+
     scrollIntoView(position: Position) {
         let range = new Range(position, position);
         this.editor.revealRange(range, TextEditorRevealType.InCenter);
@@ -63,14 +72,10 @@ export class Helper {
     }
 
     getSelections() {
-        let documentLine = this.editor.document.lineCount
-        let start = this.activeClass.location.range.start;
+        let classRange = this.activeClass.location.range;
         //cant use active clase range, because the range is sometimes incorect
         let selectionPositions = this.findAllCharacters(this.placeholder,
-            new Range(
-                start,
-                new Position(documentLine - 1, 0)
-            )
+            classRange
         );
 
         let lastSelection: Position = [...selectionPositions].pop();
@@ -171,8 +176,13 @@ export class Helper {
     }
 
     findAttributes() {
+        let constructorRange = this.construct.location.range;
+        let openingBracket = this.findCharacter('(', constructorRange, true);
+        let closingBracket = this.findCharacter(')', constructorRange);
+        let range = new Range(openingBracket, closingBracket)
+
         return this.getSymbolsInSymbol(this.construct)
-            .filter(symbol => symbol.kind === SymbolKind.Variable);
+            .filter(symbol => symbol.kind === SymbolKind.Variable && symbol.location.range.intersection(range))
     }
 
     addAssignment(): [Position, string] {

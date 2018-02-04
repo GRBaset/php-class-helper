@@ -20,7 +20,7 @@ The default keybinding is `ctrl+shift+c`, but you are free to change it however 
 
 ## Settings
 
-You can tweak the visibility of a property:
+You can tweak the visibility of a property, the default value is `private`:
 
 `php-class-helper.visibility: "private"`
 

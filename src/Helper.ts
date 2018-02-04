@@ -44,11 +44,9 @@ export class Helper {
         }
 
         await this.addVariables();
-
         await this.updateSymbols();
 
         this.selectProperties();
-
         this.updatePlaceholderName();
     }
 
@@ -57,67 +55,54 @@ export class Helper {
         this.visibility = config.get('visibility', 'private');
     }
 
-    async updateSymbols() {
-        this.symbols = await this.getSymbols(this.editor.document);
-        this.activeClass = this.getClass();
-        this.construct = this.getConstructor();
+    getClass(): SymbolInformation {
+        return this.symbols
+            .filter(symbol => symbol.kind === SymbolKind.Class)
+            .find((classSymbol) => {
+                let { start, end } = classSymbol.location.range;
+                return start.isBefore(this.cursor) && end.isAfter(this.cursor);
+            });
     }
 
-    scrollIntoView(position: Position) {
-        let range = new Range(position, position);
-        this.editor.revealRange(range, TextEditorRevealType.InCenter);
-    }
-    updatePlaceholderName() {
-        this.id++;
-        this.placeholder = 'PROPERTY' + this.id;
+    addClass() {
+        let snippet = new SnippetString('class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0');
+        this.editor.insertSnippet(snippet, this.cursor);
+
+        this.scrollIntoView(this.cursor);
     }
 
-    selectProperties() {
-        this.selections = this.getSelections();
-        this.editor.selections = this.selections;
+    getConstructor() {
+        return this.getSymbolsInSymbol(this.activeClass).find((classSymbol) => {
+            return classSymbol.kind == SymbolKind.Constructor;
+        });
     }
 
-    getSelections() {
-        let classRange = this.activeClass.location.range;
+    addConstructor() {
+        let text = '\n\tpublic function __construct()\n\t{\n\t}\n';
+        let properties = this.getProperties();
 
-        let selectionPositions = this.findAllCharacters(this.placeholder,
-            classRange
-        );
+        let position;
 
-        let lastSelection: Position = [...selectionPositions].pop();
-        let propertySelection = new Position(
-            lastSelection.line,
-            lastSelection.character + this.placeholder.length + 4
-        );
-
-        selectionPositions.push(propertySelection)
-
-        return selectionPositions.map(selection => {
-            return new Selection(
-                new Position(selection.line, selection.character),
-                new Position(selection.line, selection.character + this.placeholder.length)
-            )
-        })
-    }
-
-    findAllCharacters(character: string, range: Range): Position[] {
-        let characters: Position[] = [];
-        let currentLine = range.start.line;
-        let endLine = range.end.line;
-        while (currentLine <= endLine) {
-            let characterIndex = this.editor.document.lineAt(currentLine).text.indexOf(character);
-            if (characterIndex !== -1) {
-                characters.push(
-                    new Position(
-                        currentLine,
-                        characterIndex
-                    )
-                );
-            }
-
-            currentLine++;
+        if (empty(properties)) {
+            // add constructor at the begging of a class
+            let classRange = this.activeClass.location.range;
+            let openBracket: Position = this.findCharacter('{', classRange, true);
+            position = openBracket;
+        } else {
+            // add constructor after last property;
+            text = '\n' + text;
+            let lastProperty: Position = properties.pop().location.range.end;
+            position = new Position(
+                lastProperty.line,
+                lastProperty.character + 1
+            );
         }
-        return characters;
+
+        this.editor.edit(edit => {
+            edit.insert(position, text);
+        });
+
+        this.scrollIntoView(position);
     }
 
     async addVariables() {
@@ -134,6 +119,47 @@ export class Helper {
         this.scrollIntoView(assigment[0]);
     }
 
+    getProperties(): SymbolInformation[] {
+        return this.getSymbolsInSymbol(this.activeClass)
+            .filter(symbol => symbol.kind === SymbolKind.Property);
+    }
+
+    addProperty(): [Position, string] {
+        let staticText = '\n\t' + this.visibility + " $";
+        let text = staticText + this.placeholder + ';';
+        let properties = this.getProperties();
+
+        let position;
+
+        if (empty(properties)) {
+            // add property at the begging of a class
+            let classRange = this.activeClass.location.range;
+            let openBracket = this.findCharacter('{', classRange, true);
+
+            text += '\n';
+            position = openBracket;
+        } else {
+            // add property after last property;
+            let lastProperty: Position = properties.pop().location.range.end;
+            position = new Position(
+                lastProperty.line,
+                lastProperty.character + 1
+            );
+        }
+
+        return [position, text];
+    }
+
+    getAttributes() {
+        let constructorRange = this.construct.location.range;
+        let openingBracket = this.findCharacter('(', constructorRange, true);
+        let closingBracket = this.findCharacter(')', constructorRange);
+        let range = new Range(openingBracket, closingBracket)
+
+        return this.getSymbolsInSymbol(this.construct)
+            .filter(symbol => symbol.kind === SymbolKind.Variable && symbol.location.range.intersection(range))
+    }
+
     addAttribute(): [Position, string] {
         let text = '$' + this.placeholder;
 
@@ -142,7 +168,7 @@ export class Helper {
         let closingBracket = this.findCharacter(')', constructorRange);
         let isMultilineConstructor = openingBracket.line !== closingBracket.line;
 
-        let attributes = this.findAttributes();
+        let attributes = this.getAttributes();
         let lastAttribute = [...attributes].pop();
 
         let position = closingBracket;
@@ -173,30 +199,6 @@ export class Helper {
         return [position, text];
     }
 
-    findRegExInRange(regex: RegExp, range: Range): Position {
-        let characterIndex;
-        let currentLine = range.start.line;
-        let endLine = range.end.line;
-        while (currentLine <= endLine) {
-            characterIndex = this.editor.document.lineAt(currentLine).text.match(regex);
-
-            if (characterIndex !== null) return new Position(currentLine, characterIndex[0].length);
-
-            currentLine++;
-        }
-        return undefined;
-    }
-
-    findAttributes() {
-        let constructorRange = this.construct.location.range;
-        let openingBracket = this.findCharacter('(', constructorRange, true);
-        let closingBracket = this.findCharacter(')', constructorRange);
-        let range = new Range(openingBracket, closingBracket)
-
-        return this.getSymbolsInSymbol(this.construct)
-            .filter(symbol => symbol.kind === SymbolKind.Variable && symbol.location.range.intersection(range))
-    }
-
     addAssignment(): [Position, string] {
         let text = '\t$this->' + this.placeholder + ' = $' + this.placeholder + ';\n\t';
 
@@ -213,87 +215,32 @@ export class Helper {
 
     }
 
-    addProperty(): [Position, string] {
-        let staticText = '\n\t' + this.visibility + " $";
-        let text = staticText + this.placeholder + ';';
-        let properties = this.getProperties();
+    getSelections() {
+        let classRange = this.activeClass.location.range;
 
-        let position;
+        let selectionPositions = this.findAllCharacters(this.placeholder,
+            classRange
+        );
 
-        if (empty(properties)) {
-            // add property at the begging of a class
-            let classRange = this.activeClass.location.range;
-            let openBracket = this.findCharacter('{', classRange, true);
+        let lastSelection: Position = [...selectionPositions].pop();
+        let propertySelection = new Position(
+            lastSelection.line,
+            lastSelection.character + this.placeholder.length + 4
+        );
 
-            text += '\n';
-            position = openBracket;
-        } else {
-            // add property after last property;
-            let lastProperty: Position = properties.pop().location.range.end;
-            position = new Position(
-                lastProperty.line,
-                lastProperty.character + 1
-            );
-        }
+        selectionPositions.push(propertySelection)
 
-        return [position, text];
+        return selectionPositions.map(selection => {
+            return new Selection(
+                new Position(selection.line, selection.character),
+                new Position(selection.line, selection.character + this.placeholder.length)
+            )
+        })
     }
 
-
-
-    addConstructor() {
-        let text = '\n\tpublic function __construct()\n\t{\n\t}\n';
-        let properties = this.getProperties();
-
-        let position;
-
-        if (empty(properties)) {
-            // add constructor at the begging of a class
-            let classRange = this.activeClass.location.range;
-            let openBracket: Position = this.findCharacter('{', classRange, true);
-            position = openBracket;
-        } else {
-            // add constructor after last property;
-            text = '\n' + text;
-            let lastProperty: Position = properties.pop().location.range.end;
-            position = new Position(
-                lastProperty.line,
-                lastProperty.character + 1
-            );
-        }
-
-        this.editor.edit(edit => {
-            edit.insert(position, text);
-        });
-
-        this.scrollIntoView(position);
-    }
-
-    getProperties(): SymbolInformation[] {
-        return this.getSymbolsInSymbol(this.activeClass)
-            .filter(symbol => symbol.kind === SymbolKind.Property);
-    }
-
-    getConstructor() {
-        return this.getSymbolsInSymbol(this.activeClass).find((classSymbol) => {
-            return classSymbol.kind == SymbolKind.Constructor;
-        });
-    }
-
-    addClass() {
-        let snippet = new SnippetString('class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0');
-        this.editor.insertSnippet(snippet, this.cursor);
-
-        this.scrollIntoView(this.cursor);
-    }
-
-    getClass(): SymbolInformation {
-        return this.symbols
-            .filter(symbol => symbol.kind === SymbolKind.Class)
-            .find((classSymbol) => {
-                let { start, end } = classSymbol.location.range;
-                return start.isBefore(this.cursor) && end.isAfter(this.cursor);
-            });
+    selectProperties() {
+        this.selections = this.getSelections();
+        this.editor.selections = this.selections;
     }
 
     getSymbols(document) {
@@ -314,6 +261,17 @@ export class Helper {
         });
     }
 
+    async updateSymbols() {
+        this.symbols = await this.getSymbols(this.editor.document);
+        this.activeClass = this.getClass();
+        this.construct = this.getConstructor();
+    }
+
+    updatePlaceholderName() {
+        this.id++;
+        this.placeholder = 'PROPERTY' + this.id;
+    }
+
     findCharacter(character: string, range: Range, endPosition: boolean = false): Position {
         let currentLine = range.start.line;
         let endLine = range.end.line;
@@ -329,4 +287,42 @@ export class Helper {
         return undefined;
     }
 
+    findAllCharacters(character: string, range: Range): Position[] {
+        let characters: Position[] = [];
+        let currentLine = range.start.line;
+        let endLine = range.end.line;
+        while (currentLine <= endLine) {
+            let characterIndex = this.editor.document.lineAt(currentLine).text.indexOf(character);
+            if (characterIndex !== -1) {
+                characters.push(
+                    new Position(
+                        currentLine,
+                        characterIndex
+                    )
+                );
+            }
+
+            currentLine++;
+        }
+        return characters;
+    }
+
+    findRegExInRange(regex: RegExp, range: Range): Position {
+        let characterIndex;
+        let currentLine = range.start.line;
+        let endLine = range.end.line;
+        while (currentLine <= endLine) {
+            characterIndex = this.editor.document.lineAt(currentLine).text.match(regex);
+
+            if (characterIndex !== null) return new Position(currentLine, characterIndex[0].length);
+
+            currentLine++;
+        }
+        return undefined;
+    }
+
+    scrollIntoView(position: Position) {
+        let range = new Range(position, position);
+        this.editor.revealRange(range, TextEditorRevealType.InCenter);
+    }
 }

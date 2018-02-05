@@ -1,5 +1,4 @@
 import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range, Selection, window, TextEditorRevealType, workspace } from 'vscode';
-import { log } from 'util';
 
 
 function empty(collection: any[]) {
@@ -44,9 +43,8 @@ export class Helper {
     }
 
     addMethod(isPrivate = false) {
-        console.log(this.symbols);
         let visibility = isPrivate ? '\tprivate' : '\tpublic';
-        let text = visibility + ' function ${1:functionName}($2) \n\t{\n\t\t$3\n\t}$0\n';
+        let text = visibility + ' function ${1:functionName}($2) \n\t{\n\t\t${3://not implemented}\n\t}$0\n';
 
         let firstPrivateMetod = this.getFirstPrivateMethod();
         let position;

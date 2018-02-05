@@ -1,6 +1,9 @@
 # PHP Class Helper
 Extension for Visual Studio Code.
 
+## NOTABLE CHANGES IN LATEST RELEASE
+- changed the default keybinding from `ctrl+alt+c` to simply `alt+c`.
+
 ## Looking for a php companion? PHP Class Helper is the extension for you.
 
 What does PHP Class Helper do? 

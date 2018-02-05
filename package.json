@@ -10,6 +10,12 @@
         "url": "https://github.com/predragnikolic/php-class-helper"
     },
     "icon": "resources/icon.png",
+    "keywords": [
+        "php",
+        "constructor",
+        "class",
+        "companion"
+    ],
     "engines": {
         "vscode": "^1.19.0"
     },

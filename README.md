@@ -8,26 +8,38 @@ What does PHP Class Helper do?
 
 ![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/class.gif)
 
-* Add a constructor if the cursor is in scope of a class and there is no other constructor.
+* Add a constructor if the cursor is in scope of a class and there is no constructor.
 
 ![Add Constructor](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/constructor.gif)
 
-* Add properties if the cursor is in scope of a class and  if the class has a constructor
+* Add properties if the cursor is in scope of a class and  if the class has a constructor. Multiline constructor is also supported.  
 
 ![Add Properties](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/addVariables.gif)
 
+* Add methods. Public methods are always placed before the first private method.
+
+![Add Methods](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/addMethods.gif)
+
 ## How do you do all of that?
-Set a keybinding for this command `php-class-helper.run`. The default keybinding is `ctrl+alt+c`, but you are free to change it however you like. This simple keybinding is all you need to add a class, constructor and properties.
+
+* The keybinding to add a class, constructor and properties is `alt+c`.
+* The keybinding to add a public method is `alt+m`.
+* The keybinding to add a private method is `ctrl+alt+m`.
+
+You are free to change the keybindings however you like.
 
 ## Settings
 
 You can tweak the visibility of a property, the default value is `private`:
-
-`php-class-helper.visibility: "private"`
+```javascript
+{
+    "php-class-helper.visibility": "private"
+}
+```
 
 ## Known issues
 
-Needs a couple of second to start to work correctly.
+Needs a couple of second to start.
 
 ## Idea
 

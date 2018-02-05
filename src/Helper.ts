@@ -23,6 +23,59 @@ export class Helper {
     placeholder = 'PROPERTY' + this.id;
     visibility: string;
 
+    async addMethodCommand(editor, cursor, isPrivate = false) {
+        this.editor = editor;
+        this.cursor = cursor;
+
+        this.symbols = await this.getSymbols(this.editor.document);
+        let regExClass = this.getRegExClass();
+        if (empty(this.symbols) && has(regExClass)) {
+            window.showInformationMessage('PHP Class Helper - Pleas wait a couple of seconds');
+            return;
+        }
+
+        this.activeClass = this.getClass();
+        if (!this.activeClass) {
+            this.addClass();
+            return;
+        }
+
+        this.addMethod(isPrivate);
+    }
+
+    addMethod(isPrivate = false) {
+        console.log(this.symbols);
+        let visibility = isPrivate ? '\tprivate' : '\tpublic';
+        let text = visibility + ' function ${1:functionName}($2) \n\t{\n\t\t$3\n\t}$0\n';
+
+        let firstPrivateMetod = this.getFirstPrivateMethod();
+        let position;
+
+        if (firstPrivateMetod && !isPrivate) {
+            let { line } = firstPrivateMetod.location.range.start;
+            position = new Position(line, 0);
+            text = text + "\n";
+        } else {
+            let { line, character } = this.activeClass.location.range.end;
+            text = "\n" + text;
+            position = new Position(line, character - 1);
+        }
+
+        let snippet = new SnippetString(text);
+        this.editor.insertSnippet(snippet, position);
+        this.scrollIntoView(position);
+    }
+
+    getFirstPrivateMethod(): SymbolInformation {
+        return this.symbols
+            .filter(symbol => {
+                if (symbol.kind === SymbolKind.Method) {
+                    let { range } = symbol.location;
+                    return this.findRegExInRange(/\s*private\s*function/, range);
+                }
+            }).shift();
+    }
+
     async run(editor, cursor) {
         this.editor = editor;
         this.cursor = cursor;
@@ -49,7 +102,7 @@ export class Helper {
         }
 
         await this.addVariables();
-        await this.updateSymbols();
+        await this.updateSymbols(editor.document);
 
         this.selectProperties();
         this.updatePlaceholderName();
@@ -95,7 +148,7 @@ export class Helper {
     }
 
     addConstructor() {
-        let text = '\n\tpublic function __construct()\n\t{\n\t}\n';
+        let text = '\n\tpublic function __construct()\n\t{\n\t}';
         let properties = this.getProperties();
 
         let position;
@@ -278,8 +331,8 @@ export class Helper {
         });
     }
 
-    async updateSymbols() {
-        this.symbols = await this.getSymbols(this.editor.document);
+    async updateSymbols(document) {
+        this.symbols = await this.getSymbols(document);
         this.activeClass = this.getClass();
         this.construct = this.getConstructor();
     }

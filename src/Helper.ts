@@ -86,7 +86,6 @@ export class Helper {
             }
         })
 
-        this.scrollIntoView(position);
     }
 
     addGetter(property: SymbolInformation, isPrivate = false) {

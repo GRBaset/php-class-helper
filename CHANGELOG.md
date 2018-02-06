@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to the "php-class-helper" extension will be documented in this file.
 
+## [0.0.9]
+### Added
+* Add getters and setters.
+    * Getters and setters are placed after a constructor if the constructor exist, if not, they are placed after the last propery. 
+    * If the class has a missing getter or setter for a property, then the missing getter or setter will be added. 
+    * If the class has a getter and a setter for a property, nothing will be added. 
+
+![Add Getters And Setters](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/addGetterAndSetter.gif)
 
 ## [0.0.6]
 ### Added

@@ -80,10 +80,16 @@ export class Helper {
         await this.editor.edit((edit) => {
             if (getter) {
                 edit.insert(position, getter);
+                window.setStatusBarMessage(`adding getter`, 3000);
             }
             if (setter) {
                 edit.insert(position, setter);
+                window.setStatusBarMessage(`adding setter`, 3000);
             }
+            if (getter && setter) {
+                window.setStatusBarMessage(`adding getter and setter`, 3000);
+            }
+
         })
 
     }
@@ -94,7 +100,7 @@ export class Helper {
 
         let method = this.getMethod(functionName);
         if (method) {
-            window.setStatusBarMessage(`Method ${functionName} already exist`, 3000);
+            window.setStatusBarMessage(`method ${functionName} already exist`, 3000);
             return;
         }
 
@@ -108,7 +114,7 @@ export class Helper {
 
         let method = this.getMethod(functionName);
         if (method) {
-            window.setStatusBarMessage(`Method ${functionName} already exist`, 3000);
+            window.setStatusBarMessage(`method ${functionName} already exist`, 3000);
             return;
         }
 

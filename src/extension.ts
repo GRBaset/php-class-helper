@@ -23,6 +23,7 @@ export function activate(context) {
         helper.addMethodCommand(editor, cursor, true);
     });
 
+    context.subscriptions.push(helper);
     context.subscriptions.push(disposable);
     context.subscriptions.push(disposable2);
     context.subscriptions.push(disposable3);

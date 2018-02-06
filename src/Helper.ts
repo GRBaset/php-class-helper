@@ -46,54 +46,52 @@ export class Helper {
         let property: SymbolInformation = this.getPropertyUnderCursor();
 
         if (property) {
-            this.addGetterAndSetter(property);
+            await this.addGetterAndSetter(property);
             return;
         }
 
         this.addMethod(isPrivate);
     }
 
-    addGetterAndSetter(property: SymbolInformation) {
+    async addGetterAndSetter(property: SymbolInformation) {
+        let getter: string | null = this.addGetter(property);
+        let setter: string | null = this.addSetter(property);
 
-        this.addGetter(property);
-        this.addSetter(property);
-    }
+        let position: Position;
 
-    methodExist(propName) {
-        let methods = this.getMethods();
-        return methods.find(symbol => {
-            return symbol.name == propName;
+        this.construct = this.getConstructor();
+        if (this.construct) {
+            if (getter) {
+                getter = '\n\n' + getter;
+            } else if (setter) {
+                setter = '\n\n' + setter;
+            }
+            position = this.construct.location.range.end;
+        }
+
+        await this.editor.edit((edit) => {
+            if (getter) {
+                edit.insert(position, getter);
+            }
+            if (setter) {
+                edit.insert(position, setter);
+            }
         })
+
+        this.scrollIntoView(position);
     }
 
     addGetter(property: SymbolInformation, isPrivate = false) {
         let propName = property.name.slice(1);
         let functionName = `get${uppercaseFirst(propName)}`;
 
-        if (this.methodExist(functionName)) {
-            console.log('method getter exist');
-
+        let method = this.getMethod(functionName);
+        if (method) {
+            window.setStatusBarMessage(`Method ${functionName} already exist`, 3000);
             return;
         }
 
-        let text = `\tpublic function ${functionName}() \n\t{\n\t\treturn \\$this->${propName};\n\t}\n`;
-
-        let firstPrivateMetod = this.getFirstPrivateMethod();
-        let position;
-
-        if (firstPrivateMetod && !isPrivate) {
-            let { line } = firstPrivateMetod.location.range.start;
-            position = new Position(line, 0);
-            text = text + "\n";
-        } else {
-            let { line, character } = this.activeClass.location.range.end;
-            text = "\n" + text;
-            position = new Position(line, character - 1);
-        }
-
-        let snippet = new SnippetString(text);
-        this.editor.insertSnippet(snippet, position);
-        this.scrollIntoView(position);
+        return `\tpublic function ${functionName}() \n\t{\n\t\treturn \$this->${propName};\n\t}\n`;
     }
 
     addSetter(property: SymbolInformation, isPrivate = false) {
@@ -101,30 +99,13 @@ export class Helper {
 
         let functionName = `set${uppercaseFirst(propName)}`;
 
-        if (this.methodExist(functionName)) {
-            console.log('method setter exist');
-
+        let method = this.getMethod(functionName);
+        if (method) {
+            window.setStatusBarMessage(`Method ${functionName} already exist`, 3000);
             return;
         }
 
-        let text = `\tpublic function ${functionName}(\\${property.name}) \n\t{\n\t\t\\$this->${propName} = \\${property.name};\n\t}\n`;
-
-        let firstPrivateMetod = this.getFirstPrivateMethod();
-        let position;
-
-        if (firstPrivateMetod && !isPrivate) {
-            let { line } = firstPrivateMetod.location.range.start;
-            position = new Position(line, 0);
-            text = text + "\n";
-        } else {
-            let { line, character } = this.activeClass.location.range.end;
-            text = "\n" + text;
-            position = new Position(line, character - 1);
-        }
-
-        let snippet = new SnippetString(text);
-        this.editor.insertSnippet(snippet, position);
-        this.scrollIntoView(position);
+        return `\n\tpublic function ${functionName}(${property.name}) \n\t{\n\t\t\$this->${propName} = ${property.name};\n\t}`;
     }
 
     addMethod(isPrivate = false) {
@@ -156,6 +137,13 @@ export class Helper {
             .filter(symbol => {
                 return symbol.kind === SymbolKind.Method
             });
+    }
+
+    getMethod(propName) {
+        let methods = this.getMethods();
+        return methods.find(symbol => {
+            return symbol.name == propName;
+        })
     }
 
     getFirstPrivateMethod(): SymbolInformation {

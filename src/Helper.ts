@@ -1,4 +1,5 @@
 import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range, Selection, window, TextEditorRevealType, workspace } from 'vscode';
+import { log } from 'util';
 
 
 function empty(collection: any[]) {
@@ -7,6 +8,10 @@ function empty(collection: any[]) {
 
 function has(collection: any[]) {
     return !empty(collection);
+}
+
+function uppercaseFirst(string: string) {
+    return string[0].toUpperCase() + string.slice(1)
 }
 
 export class Helper {
@@ -38,8 +43,88 @@ export class Helper {
             this.addClass();
             return;
         }
+        let property: SymbolInformation = this.getPropertyUnderCursor();
+
+        if (property) {
+            this.addGetterAndSetter(property);
+            return;
+        }
 
         this.addMethod(isPrivate);
+    }
+
+    addGetterAndSetter(property: SymbolInformation) {
+
+        this.addGetter(property);
+        this.addSetter(property);
+    }
+
+    methodExist(propName) {
+        let methods = this.getMethods();
+        return methods.find(symbol => {
+            return symbol.name == propName;
+        })
+    }
+
+    addGetter(property: SymbolInformation, isPrivate = false) {
+        let propName = property.name.slice(1);
+        let functionName = `get${uppercaseFirst(propName)}`;
+
+        if (this.methodExist(functionName)) {
+            console.log('method getter exist');
+
+            return;
+        }
+
+        let text = `\tpublic function ${functionName}() \n\t{\n\t\treturn \\$this->${propName};\n\t}\n`;
+
+        let firstPrivateMetod = this.getFirstPrivateMethod();
+        let position;
+
+        if (firstPrivateMetod && !isPrivate) {
+            let { line } = firstPrivateMetod.location.range.start;
+            position = new Position(line, 0);
+            text = text + "\n";
+        } else {
+            let { line, character } = this.activeClass.location.range.end;
+            text = "\n" + text;
+            position = new Position(line, character - 1);
+        }
+
+        let snippet = new SnippetString(text);
+        this.editor.insertSnippet(snippet, position);
+        this.scrollIntoView(position);
+    }
+
+    addSetter(property: SymbolInformation, isPrivate = false) {
+        let propName = property.name.slice(1);
+
+        let functionName = `set${uppercaseFirst(propName)}`;
+
+        if (this.methodExist(functionName)) {
+            console.log('method setter exist');
+
+            return;
+        }
+
+        let text = `\tpublic function ${functionName}(\\${property.name}) \n\t{\n\t\t\\$this->${propName} = \\${property.name};\n\t}\n`;
+
+        let firstPrivateMetod = this.getFirstPrivateMethod();
+        let position;
+
+        if (firstPrivateMetod && !isPrivate) {
+            let { line } = firstPrivateMetod.location.range.start;
+            position = new Position(line, 0);
+            text = text + "\n";
+        } else {
+            let { line, character } = this.activeClass.location.range.end;
+            text = "\n" + text;
+            position = new Position(line, character - 1);
+        }
+
+        let snippet = new SnippetString(text);
+        this.editor.insertSnippet(snippet, position);
+        this.scrollIntoView(position);
     }
 
     addMethod(isPrivate = false) {
@@ -62,6 +147,15 @@ export class Helper {
         let snippet = new SnippetString(text);
         this.editor.insertSnippet(snippet, position);
         this.scrollIntoView(position);
+    }
+
+    getMethods() {
+        let activeClassMethods = this.getSymbolsInSymbol(this.activeClass);
+
+        return activeClassMethods
+            .filter(symbol => {
+                return symbol.kind === SymbolKind.Method
+            });
     }
 
     getFirstPrivateMethod(): SymbolInformation {
@@ -190,6 +284,14 @@ export class Helper {
     getProperties(): SymbolInformation[] {
         return this.getSymbolsInSymbol(this.activeClass)
             .filter(symbol => symbol.kind === SymbolKind.Property);
+    }
+
+    getPropertyUnderCursor(): SymbolInformation {
+        return this.getProperties().find((property) => {
+            let { start, end } = property.location.range;
+
+            return start.isBeforeOrEqual(this.cursor) && end.isAfterOrEqual(this.cursor);
+        });
     }
 
     addProperty(): [Position, string] {

@@ -60,13 +60,21 @@ export class Helper {
         let position: Position;
 
         this.construct = this.getConstructor();
+        let lastProperty = this.getProperties().pop().location.range.end;
+
+        if (getter) {
+            getter = '\n\n' + getter;
+        } else if (setter) {
+            setter = '\n' + setter;
+        }
+
         if (this.construct) {
-            if (getter) {
-                getter = '\n\n' + getter;
-            } else if (setter) {
-                setter = '\n\n' + setter;
-            }
             position = this.construct.location.range.end;
+        } else {
+            position = new Position(
+                lastProperty.line,
+                lastProperty.character + 1
+            );
         }
 
         await this.editor.edit((edit) => {

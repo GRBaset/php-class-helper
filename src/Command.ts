@@ -198,32 +198,4 @@ export class Command {
     //             }
     //         }).shift();
     // }
-
-    private getSelections() {
-        const classRange = this.activeClass.location.range;
-
-        const selectionPositions = this.findAllCharacters(this.placeholder,
-            classRange
-        );
-
-        const lastSelection: Position = [...selectionPositions].pop();
-        const propertySelection = new Position(
-            lastSelection.line,
-            lastSelection.character + this.placeholder.length + 4
-        );
-
-        selectionPositions.push(propertySelection);
-
-        return selectionPositions.map((selection) => {
-            return new Selection(
-                new Position(selection.line, selection.character),
-                new Position(selection.line, selection.character + this.placeholder.length)
-            );
-        });
-    }
-
-    private selectProperties() {
-        this.selections = this.getSelections();
-        this.editor.selections = this.selections;
-    }
 }

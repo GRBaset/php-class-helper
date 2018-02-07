@@ -35,7 +35,7 @@ export class SelectionRange {
         });
     }
 
-    public static selectProperties() {
+    public static multipleSelect() {
         SelectionRange.selections = SelectionRange.getSelections();
         Command.editor.selections = SelectionRange.selections;
     }

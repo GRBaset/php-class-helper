@@ -77,7 +77,7 @@ export class Command {
         await variableAdder.add();
         await symbolService.update();
 
-        SelectionRange.selectProperties();
+        SelectionRange.multipleSelect();
         VariableAdder.updateId();
     }
 

@@ -2,6 +2,7 @@
 import { commands, Position, Range, Selection, SnippetString, SymbolInformation, SymbolKind, TextEditor, TextEditorRevealType, window, workspace } from "vscode";
 
 import { empty, has, uppercaseFirst } from "./helpers";
+import { Class } from "./models/Class";
 import { SymbolService } from "./services/SymbolService";
 
 export class Command {
@@ -22,7 +23,7 @@ export class Command {
         this.editor = editor;
         this.cursor = cursor;
 
-        this.symbolService = new SymbolService(this.editor.document);
+        this.symbolService = new SymbolService(editor.document);
         const ready = await this.symbolService.ready();
 
         if (!ready) {
@@ -30,13 +31,14 @@ export class Command {
             return;
         }
 
-        this.symbols = this.symbolService.symbols;
+        const activeClass = new Class(this.symbolService);
 
-        this.activeClass = this.getClass();
+        this.activeClass = activeClass.getClassByCursor(cursor);
         if (!this.activeClass) {
-            this.addClass();
+            activeClass.addClass(editor, cursor);
             return;
         }
+
         const property: SymbolInformation = this.getPropertyUnderCursor();
 
         if (property) {
@@ -47,13 +49,13 @@ export class Command {
         this.addMethod(isPrivate);
     }
 
-    public async addConstructorCommand(editor, cursor) {
+    public async addConstructorCommand(editor: TextEditor, cursor: Position) {
         this.editor = editor;
         this.cursor = cursor;
         this.selections = [];
         this.loadSettings();
 
-        this.symbolService = new SymbolService(this.editor.document);
+        this.symbolService = new SymbolService(editor.document);
         const ready = await this.symbolService.ready();
 
         if (!ready) {
@@ -63,9 +65,11 @@ export class Command {
 
         this.symbols = this.symbolService.symbols;
 
-        this.activeClass = this.getClass();
+        const activeClass = new Class(this.symbolService);
+
+        this.activeClass = activeClass.getClassByCursor(cursor);
         if (!this.activeClass) {
-            this.addClass();
+            activeClass.addClass(editor, cursor);
             return;
         }
 

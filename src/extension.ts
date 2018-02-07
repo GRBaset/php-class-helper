@@ -1,25 +1,27 @@
+"use strict";
 import { commands, window } from "vscode";
-import { Command } from './Command';
-
-'use strict';
+import { Command } from "./Command";
+import { SymbolService } from "./services/SymbolService";
 
 export function activate(context) {
 
+    // tslint:disable-next-line:no-console
     console.log('Congratulations, your extension "php-class-helper" is now active!');
-    let command = new Command();
 
-    let disposable = commands.registerTextEditorCommand('php-class-helper.run', (editor) => {
-        let cursor = editor.selection.active;
+    const command = new Command();
+
+    const disposable = commands.registerTextEditorCommand("php-class-helper.run", (editor) => {
+        const cursor = editor.selection.active;
         command.addConstructorCommand(editor, cursor);
     });
 
-    let disposable2 = commands.registerTextEditorCommand('php-class-helper.addMehtod', (editor) => {
-        let cursor = editor.selection.active;
+    const disposable2 = commands.registerTextEditorCommand("php-class-helper.addMehtod", (editor) => {
+        const cursor = editor.selection.active;
         command.addMethodCommand(editor, cursor);
     });
 
-    let disposable3 = commands.registerTextEditorCommand('php-class-helper.addPrivateMehtod', (editor) => {
-        let cursor = editor.selection.active;
+    const disposable3 = commands.registerTextEditorCommand("php-class-helper.addPrivateMehtod", (editor) => {
+        const cursor = editor.selection.active;
         command.addMethodCommand(editor, cursor, true);
     });
 
@@ -29,5 +31,5 @@ export function activate(context) {
     context.subscriptions.push(disposable3);
 }
 
-export function deactivate() {
-}
+// tslint:disable-next-line:no-empty
+export function deactivate() { }

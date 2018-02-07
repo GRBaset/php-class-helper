@@ -1,49 +1,43 @@
-import { TextEditor, Position, commands, SymbolInformation, SymbolKind, SnippetString, Range, Selection, window, TextEditorRevealType, workspace } from 'vscode';
-import { log } from 'util';
+// tslint:disable-next-line:max-line-length
+import { commands, Position, Range, Selection, SnippetString, SymbolInformation, SymbolKind, TextEditor, TextEditorRevealType, window, workspace } from "vscode";
 
-
-function empty(collection: any[]) {
-    return !collection.length
-}
-
-function has(collection: any[]) {
-    return !empty(collection);
-}
-
-function uppercaseFirst(string: string) {
-    return string[0].toUpperCase() + string.slice(1)
-}
+import { empty, has, uppercaseFirst } from "./helpers";
+import { SymbolService } from "./services/SymbolService";
 
 export class Command {
-    editor: TextEditor;
-    cursor: Position;
+    private editor: TextEditor;
+    private cursor: Position;
 
-    symbols: SymbolInformation[];
-    selections: Selection[];
-    activeClass: SymbolInformation;
-    construct: SymbolInformation;
-    id = 1;
+    private symbolService: SymbolService;
+    private symbols: SymbolInformation[];
+    private selections: Selection[];
+    private activeClass: SymbolInformation;
+    private construct: SymbolInformation;
+    private id = 1;
 
-    placeholder = 'PROPERTY' + this.id;
-    visibility: string;
+    private placeholder = "PROPERTY" + this.id;
+    private visibility: string;
 
-    async addMethodCommand(editor, cursor, isPrivate = false) {
+    public async addMethodCommand(editor, cursor, isPrivate = false) {
         this.editor = editor;
         this.cursor = cursor;
 
-        this.symbols = await this.getSymbols(this.editor.document);
-        let regExClass = this.getRegExClass();
-        if (empty(this.symbols) && has(regExClass)) {
-            window.showInformationMessage('PHP Class Helper - Pleas wait a couple of seconds');
+        this.symbolService = new SymbolService(this.editor.document);
+        const ready = await this.symbolService.ready();
+
+        if (!ready) {
+            window.showInformationMessage("PHP Class Helper - Pleas wait a couple of seconds");
             return;
         }
+
+        this.symbols = this.symbolService.symbols;
 
         this.activeClass = this.getClass();
         if (!this.activeClass) {
             this.addClass();
             return;
         }
-        let property: SymbolInformation = this.getPropertyUnderCursor();
+        const property: SymbolInformation = this.getPropertyUnderCursor();
 
         if (property) {
             await this.addGetterAndSetter(property);
@@ -53,19 +47,54 @@ export class Command {
         this.addMethod(isPrivate);
     }
 
-    async addGetterAndSetter(property: SymbolInformation) {
+    public async addConstructorCommand(editor, cursor) {
+        this.editor = editor;
+        this.cursor = cursor;
+        this.selections = [];
+        this.loadSettings();
+
+        this.symbolService = new SymbolService(this.editor.document);
+        const ready = await this.symbolService.ready();
+
+        if (!ready) {
+            window.showInformationMessage("PHP Class Helper - Pleas wait a couple of seconds");
+            return;
+        }
+
+        this.symbols = this.symbolService.symbols;
+
+        this.activeClass = this.getClass();
+        if (!this.activeClass) {
+            this.addClass();
+            return;
+        }
+
+        this.construct = this.getConstructor();
+        if (!this.construct) {
+            this.addConstructor();
+            return;
+        }
+
+        await this.addVariables();
+        await this.updateSymbols(editor.document);
+
+        this.selectProperties();
+        this.updatePlaceholderName();
+    }
+
+    private async addGetterAndSetter(property: SymbolInformation) {
         let getter: string | null = this.addGetter(property);
         let setter: string | null = this.addSetter(property);
 
         let position: Position;
 
         this.construct = this.getConstructor();
-        let lastProperty = this.getProperties().pop().location.range.end;
+        const lastProperty = this.getProperties().pop().location.range.end;
 
         if (getter) {
-            getter = '\n\n' + getter;
+            getter = "\n\n" + getter;
         } else if (setter) {
-            setter = '\n' + setter;
+            setter = "\n" + setter;
         }
 
         if (this.construct) {
@@ -90,15 +119,14 @@ export class Command {
                 window.setStatusBarMessage(`adding getter and setter`, 3000);
             }
 
-        })
-
+        });
     }
 
-    addGetter(property: SymbolInformation, isPrivate = false) {
-        let propName = property.name.slice(1);
-        let functionName = `get${uppercaseFirst(propName)}`;
+    private addGetter(property: SymbolInformation, isPrivate = false) {
+        const propName = property.name.slice(1);
+        const functionName = `get${uppercaseFirst(propName)}`;
 
-        let method = this.getMethod(functionName);
+        const method = this.getMethod(functionName);
         if (method) {
             window.setStatusBarMessage(`method ${functionName} already exist`, 3000);
             return;
@@ -107,211 +135,170 @@ export class Command {
         return `\tpublic function ${functionName}() \n\t{\n\t\treturn \$this->${propName};\n\t}\n`;
     }
 
-    addSetter(property: SymbolInformation, isPrivate = false) {
-        let propName = property.name.slice(1);
+    private addSetter(property: SymbolInformation, isPrivate = false) {
+        const propName = property.name.slice(1);
 
-        let functionName = `set${uppercaseFirst(propName)}`;
+        const functionName = `set${uppercaseFirst(propName)}`;
 
-        let method = this.getMethod(functionName);
+        const method = this.getMethod(functionName);
         if (method) {
             window.setStatusBarMessage(`method ${functionName} already exist`, 3000);
             return;
         }
 
-        return `\n\tpublic function ${functionName}(${property.name}) \n\t{\n\t\t\$this->${propName} = ${property.name};\n\t}`;
+        const text = `\n\tpublic function ${functionName}(${property.name})
+            \n\t{\n\t\t\$this->${propName} = ${property.name};\n\t}`;
+
+        return text;
     }
 
-    addMethod(isPrivate = false) {
-        let visibility = isPrivate ? '\tprivate' : '\tpublic';
-        let text = visibility + ' function ${1:functionName}($2) \n\t{\n\t\t${3://not implemented}\n\t}$0\n';
+    private addMethod(isPrivate = false) {
+        const visibility = isPrivate ? "\tprivate" : "\tpublic";
+        let text = visibility + " function ${1:functionName}($2) \n\t{\n\t\t${3://not implemented}\n\t}$0\n";
 
-        let firstPrivateMetod = this.getFirstPrivateMethod();
+        const firstPrivateMetod = this.getFirstPrivateMethod();
         let position;
 
         if (firstPrivateMetod && !isPrivate) {
-            let { line } = firstPrivateMetod.location.range.start;
+            const { line } = firstPrivateMetod.location.range.start;
             position = new Position(line, 0);
             text = text + "\n";
         } else {
-            let { line, character } = this.activeClass.location.range.end;
+            const { line, character } = this.activeClass.location.range.end;
             text = "\n" + text;
             position = new Position(line, character - 1);
         }
 
-        let snippet = new SnippetString(text);
+        const snippet = new SnippetString(text);
         this.editor.insertSnippet(snippet, position);
         this.scrollIntoView(position);
     }
 
-    getMethods() {
-        let activeClassMethods = this.getSymbolsInSymbol(this.activeClass);
+    private getMethods() {
+        const activeClassMethods = this.symbolService.getSymbolsInSymbol(this.activeClass);
 
         return activeClassMethods
-            .filter(symbol => {
-                return symbol.kind === SymbolKind.Method
+            .filter((symbol) => {
+                return symbol.kind === SymbolKind.Method;
             });
     }
 
-    getMethod(propName) {
-        let methods = this.getMethods();
-        return methods.find(symbol => {
-            return symbol.name == propName;
-        })
+    private getMethod(propName) {
+        const methods = this.getMethods();
+        return methods.find((symbol) => {
+            return symbol.name === propName;
+        });
     }
 
-    getFirstPrivateMethod(): SymbolInformation {
+    private getFirstPrivateMethod(): SymbolInformation {
         return this.symbols
-            .filter(symbol => {
+            .filter((symbol) => {
                 if (symbol.kind === SymbolKind.Method) {
-                    let { range } = symbol.location;
+                    const { range } = symbol.location;
                     return this.findRegExInRange(/\s*private\s*function/, range);
                 }
             }).shift();
     }
 
-    async addConstructorCommand(editor, cursor) {
-        this.editor = editor;
-        this.cursor = cursor;
-        this.selections = [];
-        this.loadSettings();
-
-        this.symbols = await this.getSymbols(this.editor.document);
-        let regExClass = this.getRegExClass();
-        if (empty(this.symbols) && has(regExClass)) {
-            window.showInformationMessage('PHP Class Helper - Pleas wait a couple of seconds');
-            return;
-        }
-
-        this.activeClass = this.getClass();
-        if (!this.activeClass) {
-            this.addClass();
-            return;
-        }
-
-        this.construct = this.getConstructor();
-        if (!this.construct) {
-            this.addConstructor();
-            return;
-        }
-
-        await this.addVariables();
-        await this.updateSymbols(editor.document);
-
-        this.selectProperties();
-        this.updatePlaceholderName();
+    private loadSettings() {
+        const config = workspace.getConfiguration("php-class-helper");
+        this.visibility = config.get("visibility", "private");
     }
 
-    loadSettings() {
-        let config = workspace.getConfiguration('php-class-helper');
-        this.visibility = config.get('visibility', 'private');
-    }
-
-    getRegExClass() {
-        let start = new Position(0, 0);
-        let end = new Position(
-            this.editor.document.lineCount - 1,
-            0
-        );
-        let range = new Range(start, end);
-        let classR = this.findAllCharacters('class', range);
-        return classR;
-
-    }
-
-    getClass(): SymbolInformation {
+    private getClass(): SymbolInformation {
         return this.symbols
-            .filter(symbol => symbol.kind === SymbolKind.Class)
+            .filter((symbol) => symbol.kind === SymbolKind.Class)
             .find((classSymbol) => {
-                let { start, end } = classSymbol.location.range;
+                const { start, end } = classSymbol.location.range;
                 return start.isBefore(this.cursor) && end.isAfter(this.cursor);
             });
     }
 
-    addClass() {
-        let snippet = new SnippetString('class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0');
+    private addClass() {
+        const snippet = new SnippetString("class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0");
         this.editor.insertSnippet(snippet, this.cursor);
 
         this.scrollIntoView(this.cursor);
     }
 
-    getConstructor() {
-        return this.getSymbolsInSymbol(this.activeClass).find((classSymbol) => {
-            return classSymbol.kind == SymbolKind.Constructor;
+    private getConstructor() {
+        return this.symbolService.getSymbolsInSymbol(this.activeClass).find((classSymbol) => {
+            return classSymbol.kind === SymbolKind.Constructor;
         });
     }
 
-    addConstructor() {
-        let text = '\n\tpublic function __construct()\n\t{\n\t}';
-        let properties = this.getProperties();
+    private addConstructor() {
+        let text = "\n\tpublic function __construct()\n\t{\n\t}";
+        const properties = this.getProperties();
 
         let position;
 
         if (empty(properties)) {
             // add constructor at the begging of a class
-            let classRange = this.activeClass.location.range;
-            let openBracket: Position = this.findCharacter('{', classRange, true);
+            const classRange = this.activeClass.location.range;
+            const openBracket: Position = this.findCharacter("{", classRange, true);
             position = openBracket;
         } else {
             // add constructor after last property;
-            text = '\n' + text;
-            let lastProperty: Position = properties.pop().location.range.end;
+            text = "\n" + text;
+            const lastProperty: Position = properties.pop().location.range.end;
             position = new Position(
                 lastProperty.line,
                 lastProperty.character + 1
             );
         }
 
-        this.editor.edit(edit => {
+        this.editor.edit((edit) => {
             edit.insert(position, text);
         });
 
         this.scrollIntoView(position);
     }
 
-    async addVariables() {
-        let property: [Position, string] = this.addProperty();
-        let attribute: [Position, string] = this.addAttribute();
-        let assigment: [Position, string] = this.addAssignment();
+    private async addVariables() {
+        const property: [Position, string] = this.addProperty();
+        const attribute: [Position, string] = this.addAttribute();
+        const assigment: [Position, string] = this.addAssignment();
 
         await this.editor.edit((edit) => {
             edit.insert(property[0], property[1]);
             edit.insert(attribute[0], attribute[1]);
             edit.insert(assigment[0], assigment[1]);
-        })
+        });
 
         this.scrollIntoView(assigment[0]);
     }
 
-    getProperties(): SymbolInformation[] {
-        return this.getSymbolsInSymbol(this.activeClass)
-            .filter(symbol => symbol.kind === SymbolKind.Property);
+    private getProperties(): SymbolInformation[] {
+        return this.symbolService.getSymbolsInSymbol(this.activeClass)
+            .filter((symbol) => symbol.kind === SymbolKind.Property);
     }
 
-    getPropertyUnderCursor(): SymbolInformation {
+    private getPropertyUnderCursor(): SymbolInformation {
         return this.getProperties().find((property) => {
-            let { start, end } = property.location.range;
+            const { start, end } = property.location.range;
 
             return start.isBeforeOrEqual(this.cursor) && end.isAfterOrEqual(this.cursor);
         });
     }
 
-    addProperty(): [Position, string] {
-        let staticText = '\n\t' + this.visibility + " $";
-        let text = staticText + this.placeholder + ';';
-        let properties = this.getProperties();
+    private addProperty(): [Position, string] {
+        const staticText = "\n\t" + this.visibility + " $";
+        let text = staticText + this.placeholder + ";";
+        const properties = this.getProperties();
 
         let position;
 
         if (empty(properties)) {
             // add property at the begging of a class
-            let classRange = this.activeClass.location.range;
-            let openBracket = this.findCharacter('{', classRange, true);
+            const classRange = this.activeClass.location.range;
+            const openBracket = this.findCharacter("{", classRange, true);
 
-            text += '\n';
+            text += "\n";
             position = openBracket;
         } else {
             // add property after last property;
-            let lastProperty: Position = properties.pop().location.range.end;
+            const lastProperty: Position = properties.pop().location.range.end;
             position = new Position(
                 lastProperty.line,
                 lastProperty.character + 1
@@ -321,26 +308,26 @@ export class Command {
         return [position, text];
     }
 
-    getAttributes() {
-        let constructorRange = this.construct.location.range;
-        let openingBracket = this.findCharacter('(', constructorRange, true);
-        let closingBracket = this.findCharacter(')', constructorRange);
-        let range = new Range(openingBracket, closingBracket)
+    private getAttributes() {
+        const constructorRange = this.construct.location.range;
+        const openingBracket = this.findCharacter("(", constructorRange, true);
+        const closingBracket = this.findCharacter(")", constructorRange);
+        const range = new Range(openingBracket, closingBracket);
 
-        return this.getSymbolsInSymbol(this.construct)
-            .filter(symbol => symbol.kind === SymbolKind.Variable && symbol.location.range.intersection(range))
+        return this.symbolService.getSymbolsInSymbol(this.construct)
+            .filter((symbol) => symbol.kind === SymbolKind.Variable && symbol.location.range.intersection(range));
     }
 
-    addAttribute(): [Position, string] {
-        let text = '$' + this.placeholder;
+    private addAttribute(): [Position, string] {
+        let text = "$" + this.placeholder;
 
-        let constructorRange = this.construct.location.range;
-        let openingBracket = this.findCharacter('(', constructorRange, true);
-        let closingBracket = this.findCharacter(')', constructorRange);
-        let isMultilineConstructor = openingBracket.line !== closingBracket.line;
+        const constructorRange = this.construct.location.range;
+        const openingBracket = this.findCharacter("(", constructorRange, true);
+        const closingBracket = this.findCharacter(")", constructorRange);
+        const isMultilineConstructor = openingBracket.line !== closingBracket.line;
 
-        let attributes = this.getAttributes();
-        let lastAttribute = [...attributes].pop();
+        const attributes = this.getAttributes();
+        const lastAttribute = [...attributes].pop();
 
         let position = closingBracket;
 
@@ -351,33 +338,33 @@ export class Command {
                     new Range(openingBracket, closingBracket)
                 );
 
-                if (position.line == closingBracket.line || position.line == openingBracket.line) {
+                if (position.line === closingBracket.line || position.line === openingBracket.line) {
                     position = lastAttribute.location.range.end;
-                    text = ',\n\t\t' + text + '\n\t';
+                    text = ",\n\t\t" + text + "\n\t";
                 } else {
-                    text = ',\n\t\t' + text;
+                    text = ",\n\t\t" + text;
                 }
             } else {
-                text = '\t' + text + '\n\t';
+                text = "\t" + text + "\n\t";
             }
 
         } else {
             if (has(attributes)) {
-                text = ', ' + text;
+                text = ", " + text;
             }
         }
 
         return [position, text];
     }
 
-    addAssignment(): [Position, string] {
-        let text = '\t$this->' + this.placeholder + ' = $' + this.placeholder + ';\n\t';
+    private addAssignment(): [Position, string] {
+        const text = "\t$this->" + this.placeholder + " = $" + this.placeholder + ";\n\t";
 
-        let constructorRange = this.construct.location.range;
-        let closingBracket = this.findCharacter('}', constructorRange);
-        let openingBracket = this.findCharacter('{', constructorRange, true);
+        const constructorRange = this.construct.location.range;
+        const closingBracket = this.findCharacter("}", constructorRange);
+        const openingBracket = this.findCharacter("{", constructorRange, true);
 
-        let position = new Position(
+        const position = new Position(
             closingBracket.line,
             closingBracket.character
         );
@@ -386,84 +373,68 @@ export class Command {
 
     }
 
-    getSelections() {
-        let classRange = this.activeClass.location.range;
+    private getSelections() {
+        const classRange = this.activeClass.location.range;
 
-        let selectionPositions = this.findAllCharacters(this.placeholder,
+        const selectionPositions = this.findAllCharacters(this.placeholder,
             classRange
         );
 
-        let lastSelection: Position = [...selectionPositions].pop();
-        let propertySelection = new Position(
+        const lastSelection: Position = [...selectionPositions].pop();
+        const propertySelection = new Position(
             lastSelection.line,
             lastSelection.character + this.placeholder.length + 4
         );
 
-        selectionPositions.push(propertySelection)
+        selectionPositions.push(propertySelection);
 
-        return selectionPositions.map(selection => {
+        return selectionPositions.map((selection) => {
             return new Selection(
                 new Position(selection.line, selection.character),
                 new Position(selection.line, selection.character + this.placeholder.length)
-            )
-        })
+            );
+        });
     }
 
-    selectProperties() {
+    private selectProperties() {
         this.selections = this.getSelections();
         this.editor.selections = this.selections;
     }
 
-    getSymbols(document) {
-        return commands.executeCommand<SymbolInformation[]>('vscode.executeDocumentSymbolProvider', document.uri);
-    }
-
-    getSymbolsInSymbol({ name, containerName, kind }: SymbolInformation): SymbolInformation[] {
-        if (kind == SymbolKind.Class) {
-            containerName = containerName
-                ? containerName.concat('\\', name)
-                : name;
-        } else {
-            containerName = name
-        }
-
-        return this.symbols.filter((symbol: SymbolInformation) => {
-            return symbol.containerName == containerName;
-        });
-    }
-
-    async updateSymbols(document) {
-        this.symbols = await this.getSymbols(document);
+    private async updateSymbols(document) {
+        this.symbols = await this.symbolService.getAll(document);
         this.activeClass = this.getClass();
         this.construct = this.getConstructor();
     }
 
-    updatePlaceholderName() {
+    private updatePlaceholderName() {
         this.id++;
-        this.placeholder = 'PROPERTY' + this.id;
+        this.placeholder = "PROPERTY" + this.id;
     }
 
-    findCharacter(character: string, range: Range, endPosition: boolean = false): Position {
+    private findCharacter(character: string, range: Range, endPosition: boolean = false): Position {
         let currentLine = range.start.line;
-        let endLine = range.end.line;
+        const endLine = range.end.line;
         while (currentLine <= endLine) {
-            let characterIndex = this.editor.document.lineAt(currentLine).text.indexOf(character);
-            if (characterIndex !== -1) return new Position(
-                currentLine,
-                endPosition ? characterIndex + 1 : characterIndex
-            );
+            const characterIndex = this.editor.document.lineAt(currentLine).text.indexOf(character);
+            if (characterIndex !== -1) {
+                return new Position(
+                    currentLine,
+                    endPosition ? characterIndex + 1 : characterIndex
+                );
+            }
 
             currentLine++;
         }
         return undefined;
     }
 
-    findAllCharacters(character: string, range: Range): Position[] {
-        let characters: Position[] = [];
+    private findAllCharacters(character: string, range: Range): Position[] {
+        const characters: Position[] = [];
         let currentLine = range.start.line;
-        let endLine = range.end.line;
+        const endLine = range.end.line;
         while (currentLine <= endLine) {
-            let characterIndex = this.editor.document.lineAt(currentLine).text.indexOf(character);
+            const characterIndex = this.editor.document.lineAt(currentLine).text.indexOf(character);
             if (characterIndex !== -1) {
                 characters.push(
                     new Position(
@@ -478,22 +449,24 @@ export class Command {
         return characters;
     }
 
-    findRegExInRange(regex: RegExp, range: Range): Position {
+    private findRegExInRange(regex: RegExp, range: Range): Position {
         let characterIndex;
         let currentLine = range.start.line;
-        let endLine = range.end.line;
+        const endLine = range.end.line;
         while (currentLine <= endLine) {
             characterIndex = this.editor.document.lineAt(currentLine).text.match(regex);
 
-            if (characterIndex !== null) return new Position(currentLine, characterIndex[0].length);
+            if (characterIndex !== null) {
+                return new Position(currentLine, characterIndex[0].length);
+            }
 
             currentLine++;
         }
         return undefined;
     }
 
-    scrollIntoView(position: Position) {
-        let range = new Range(position, position);
+    private scrollIntoView(position: Position) {
+        const range = new Range(position, position);
         this.editor.revealRange(range, TextEditorRevealType.InCenter);
     }
 }

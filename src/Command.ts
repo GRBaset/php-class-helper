@@ -14,7 +14,7 @@ function uppercaseFirst(string: string) {
     return string[0].toUpperCase() + string.slice(1)
 }
 
-export class Helper {
+export class Command {
     editor: TextEditor;
     cursor: Position;
 
@@ -169,7 +169,7 @@ export class Helper {
             }).shift();
     }
 
-    async run(editor, cursor) {
+    async addConstructorCommand(editor, cursor) {
         this.editor = editor;
         this.cursor = cursor;
         this.selections = [];

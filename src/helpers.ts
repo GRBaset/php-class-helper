@@ -1,4 +1,5 @@
 import { Position, Range, TextEditor, TextEditorRevealType } from "vscode";
+import { Command } from "./Command";
 
 export function empty(collection: any[]) {
     return !collection.length;
@@ -12,7 +13,7 @@ export function uppercaseFirst(word: string) {
     return word[0].toUpperCase() + word.slice(1);
 }
 
-export function scrollIntoView(editor: TextEditor, position: Position) {
+export function scrollIntoView(position: Position) {
     const range = new Range(position, position);
-    editor.revealRange(range, TextEditorRevealType.InCenter);
+    Command.editor.revealRange(range, TextEditorRevealType.InCenter);
 }

@@ -1,26 +1,36 @@
-import { Position, SnippetString, SymbolInformation, SymbolKind, TextEditor } from "vscode";
+import { Position, SnippetString, SymbolInformation, SymbolKind } from "vscode";
+import { Command } from "../Command";
 import { scrollIntoView } from "../helpers";
 import { SymbolService } from "../services/SymbolService";
 
 export class Class {
-    constructor(private symbolService: SymbolService) { }
+    /**
+     * active class
+     */
+    public static active: SymbolInformation;
+
+    constructor() {
+        this.getByCursor();
+    }
 
     /**
      * getClass
      */
-    public getClassByCursor(position: Position): SymbolInformation {
-        return this.symbolService.symbols
+    public getByCursor(): SymbolInformation {
+        Class.active = SymbolService.active
             .filter((symbol) => symbol.kind === SymbolKind.Class)
             .find((classSymbol) => {
                 const { start, end } = classSymbol.location.range;
-                return start.isBefore(position) && end.isAfter(position);
+                return start.isBefore(Command.cursor) && end.isAfter(Command.cursor);
             });
+
+        return Class.active;
     }
 
-    public addClass(editor: TextEditor, position: Position): void {
+    public add(): void {
         const snippet = new SnippetString("class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0");
-        editor.insertSnippet(snippet, position);
+        Command.editor.insertSnippet(snippet, Command.cursor);
 
-        scrollIntoView(editor, position);
+        scrollIntoView(Command.cursor);
     }
 }

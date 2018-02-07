@@ -12,23 +12,23 @@ export function activate(context) {
 
     const disposable = commands.registerTextEditorCommand("php-class-helper.run", (editor) => {
         const cursor = editor.selection.active;
-        command.addConstructorCommand(editor, cursor);
+        command.executeAddConstructor(editor, cursor);
     });
 
-    const disposable2 = commands.registerTextEditorCommand("php-class-helper.addMehtod", (editor) => {
-        const cursor = editor.selection.active;
-        command.addMethodCommand(editor, cursor);
-    });
+    // const disposable2 = commands.registerTextEditorCommand("php-class-helper.addMehtod", (editor) => {
+    //     const cursor = editor.selection.active;
+    //     command.addMethodCommand(editor, cursor);
+    // });
 
-    const disposable3 = commands.registerTextEditorCommand("php-class-helper.addPrivateMehtod", (editor) => {
-        const cursor = editor.selection.active;
-        command.addMethodCommand(editor, cursor, true);
-    });
+    // const disposable3 = commands.registerTextEditorCommand("php-class-helper.addPrivateMehtod", (editor) => {
+    //     const cursor = editor.selection.active;
+    //     command.addMethodCommand(editor, cursor, true);
+    // });
 
     context.subscriptions.push(command);
     context.subscriptions.push(disposable);
-    context.subscriptions.push(disposable2);
-    context.subscriptions.push(disposable3);
+    // context.subscriptions.push(disposable2);
+    // context.subscriptions.push(disposable3);
 }
 
 // tslint:disable-next-line:no-empty

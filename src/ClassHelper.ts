@@ -1,4 +1,4 @@
-import { Position, SymbolInformation, TextEditor, window } from "vscode";
+import { Position, SymbolInformation, TextDocument, TextEditor, window } from "vscode";
 import { Class } from "./models/Class";
 import { Constructor } from "./models/Constructor";
 import { GetterAndSetterAdder } from "./models/GetterAndSetterAdder";
@@ -12,12 +12,13 @@ import { SymbolService } from "./services/SymbolService";
 export class ClassHelper {
     public static editor: TextEditor;
     public static cursor: Position;
+    public static document: TextDocument;
 
     public async executeAddMethod(editor, cursor, isPrivate = false) {
         ClassHelper.editor = editor;
         ClassHelper.cursor = cursor;
+        ClassHelper.document = editor.document;
 
-        FindService.document = editor.document;
         const symbolService = new SymbolService();
         const ready = await symbolService.isReady();
         if (!ready) {
@@ -46,10 +47,10 @@ export class ClassHelper {
     public async executeAddConstructor(editor: TextEditor, cursor: Position) {
         ClassHelper.editor = editor;
         ClassHelper.cursor = cursor;
+        ClassHelper.document = editor.document;
 
         SelectionRange.clear();
 
-        FindService.document = editor.document;
         const symbolService = new SymbolService();
         const ready = await symbolService.isReady();
         if (!ready) {

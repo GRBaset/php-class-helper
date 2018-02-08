@@ -56,11 +56,11 @@ export class Method {
 
         if (type === METHOD_TYPE.Getter) {
             functionName = `get${uppercaseFirst(propName)}`;
-            text = `\tpublic function ${functionName}() \n\t{\n\t\treturn \$this->${propName};\n\t}\n`;
+            text = ClassHelper.language.getGetterText(functionName, propName);
         } else {
             functionName = `set${uppercaseFirst(propName)}`;
             // tslint:disable-next-line:max-line-length
-            text = `\n\tpublic function ${functionName}(${property.name}) \n\t{\n\t\t\$this->${propName} = ${property.name};\n\t}`;
+            text = ClassHelper.language.getSetterText(functionName, propName);
         }
 
         const method = this.getByName(functionName);

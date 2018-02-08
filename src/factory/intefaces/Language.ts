@@ -15,6 +15,7 @@ export interface Language {
     assignmentText: string;
 
     getMethodText(isPrivate?: boolean): string;
-
+    getGetterText(functionName: string, propertyName: string): string;
+    getSetterText(functionName: string, propertyName: string): string;
     // getConstructor(symbolsInClass: SymbolInformation[]);
 }

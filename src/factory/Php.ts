@@ -30,4 +30,14 @@ export class Php implements Language {
         const text = visibility + " function ${1:functionName}($2) \n\t{\n\t\t${3://not implemented}\n\t}$0\n";
         return text;
     }
+
+    public getGetterText(functionName: string, propertyName: string): string {
+        return `\tpublic function ${functionName}() \n\t{\n\t\treturn \$this->${propertyName};\n\t}\n`;
+    }
+
+    public getSetterText(functionName: string, propertyName: string): string {
+        // tslint:disable-next-line:max-line-length
+        const text = `\n\tpublic function ${functionName}(\$${propertyName}) \n\t{\n\t\t\$this->${propertyName} = \$${propertyName};\n\t}`;
+        return text;
+    }
 }

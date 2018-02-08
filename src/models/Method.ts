@@ -7,6 +7,9 @@ import { Class } from "./Class";
 import { METHOD_TYPE } from "./enums/GetterSetter";
 
 export class Method {
+    /**
+     * All methods in an active class
+     */
     public methods: SymbolInformation[];
 
     constructor() {
@@ -14,7 +17,7 @@ export class Method {
     }
 
     /**
-     * addMethod
+     * Add a method snippet
      */
     public add(isPrivate = false): void {
         const visibility = isPrivate ? "\tprivate" : "\tpublic";
@@ -38,6 +41,9 @@ export class Method {
         scrollIntoView(position);
     }
 
+    /**
+     * Generate a text snippet to later add to a document
+     */
     public getGetterOrSetterSnippet(property: SymbolInformation, type: METHOD_TYPE): string {
         const propName = property.name.slice(1);
         let functionName: string;
@@ -62,7 +68,7 @@ export class Method {
     }
 
     /**
-     * getMethod
+     * Get method by its name
      */
     public getByName(methodName: string): SymbolInformation {
         const methods = this.getAll();
@@ -72,8 +78,7 @@ export class Method {
     }
 
     /**
-     * getFirstPrivateMethod
-     * maybe use existing array this.methods
+     * Get the first private method in a class
      */
     private getFirstPrivate(): SymbolInformation {
 
@@ -87,7 +92,7 @@ export class Method {
     }
 
     /**
-     * getMethods
+     * Get all methods in an active class
      */
     private getAll(): SymbolInformation[] {
         const activeClass = SymbolService.getSymbolsInSymbol(Class.active);

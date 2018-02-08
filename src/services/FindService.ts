@@ -3,6 +3,12 @@ import { ClassHelper } from "../ClassHelper";
 
 export class FindService {
 
+    /**
+     * Find a Character Position.
+     * @param character Search term
+     * @param range Range
+     * @param endPosition If true get the ending position of a character
+     */
     public static findCharacter(character: string, range: Range, endPosition: boolean = false): Position {
         let currentLine = range.start.line;
         const endLine = range.end.line;
@@ -20,6 +26,11 @@ export class FindService {
         return undefined;
     }
 
+    /**
+     * Find all first character occurencess for each line in a document
+     * @param character Search term
+     * @param range Range
+     */
     public static findAllCharacters(character: string, range: Range): Position[] {
         const characters: Position[] = [];
         let currentLine = range.start.line;
@@ -40,6 +51,11 @@ export class FindService {
         return characters;
     }
 
+    /**
+     * Find a position in a range, with a regex
+     * @param regex Regular Expression
+     * @param range Range
+     */
     public static findRegExInRange(regex: RegExp, range: Range): Position {
         let characterIndex;
         let currentLine = range.start.line;

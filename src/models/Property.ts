@@ -7,21 +7,27 @@ import { Class } from "./Class";
 import { VariableAdder } from "./VariableAdder";
 
 export class Property {
+    /**
+     * Visibility of a property: Can be:
+     * private
+     * protected
+     * public
+     */
     private visibility: string;
 
     constructor() {
-        this.loadSettings();
+        this.loadVisibilitySetting();
     }
 
     /**
-     * getProperties
+     * Get all propertise of the active class
      */
     public getAll(): SymbolInformation[] {
         return SymbolService.getSymbolsInSymbol(Class.active)
             .filter((symbol) => symbol.kind === SymbolKind.Property);
     }
     /**
-     * addProperty
+     * Add a property
      */
     public add(): [Position, string] {
         const staticText = "\n\t" + this.visibility + " $";
@@ -49,7 +55,7 @@ export class Property {
         return [position, text];
     }
     /**
-     * getPropertyUnderCursor
+     * Get property under cursor
      */
     public getByCursorPosition(): SymbolInformation {
         return this.getAll().find((property) => {
@@ -59,11 +65,17 @@ export class Property {
         });
     }
 
+    /**
+     * Get Last property
+     */
     public getlast() {
         return this.getAll().pop().location.range.end;
     }
 
-    private loadSettings() {
+    /**
+     * Get visibilty setting
+     */
+    private loadVisibilitySetting() {
         const config = workspace.getConfiguration("php-class-helper");
         this.visibility = config.get("visibility", "private");
     }

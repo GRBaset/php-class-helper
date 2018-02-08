@@ -7,7 +7,9 @@ import { Class } from "./Class";
 import { Property } from "./Property";
 
 export class VariableAdder {
-
+    /**
+     * Properties have IDs, which are used by the multipleSelect method
+     */
     public static id = 1;
     public static placeholder = "PROPERTY" + VariableAdder.id;
 
@@ -17,7 +19,7 @@ export class VariableAdder {
     }
 
     /**
-     * addVariables
+     * Add properties, arguments, assigments to a class
      */
     public async add() {
         const prop = new Property();

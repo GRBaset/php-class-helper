@@ -6,7 +6,9 @@ import { empty, has } from "./../helpers";
 import { FindService } from "./FindService";
 
 export class SymbolService {
-
+    /**
+     * List of all the symbols in a document
+     */
     public static active: SymbolInformation[];
 
     public static getSymbolsInSymbol({ name, containerName, kind }: SymbolInformation): SymbolInformation[] {
@@ -23,6 +25,10 @@ export class SymbolService {
         });
     }
 
+    /**
+     * Check if the document has a class, but no symbol is loaded.
+     * This is used to determen if the extension is ready or not.
+     */
     public async isReady() {
         SymbolService.active = await this.getAll();
         const classExist = this.classExist();
@@ -30,7 +36,7 @@ export class SymbolService {
         return !(empty(SymbolService.active) && has(classExist));
     }
     /**
-     * getSymbols
+     * Get all the symbols of a document
      */
     public getAll() {
         return commands.executeCommand<SymbolInformation[]>("vscode.executeDocumentSymbolProvider",
@@ -38,6 +44,9 @@ export class SymbolService {
         );
     }
 
+    /**
+     * Update the symbols list afrer you add text to a document.
+     */
     public async update() {
         SymbolService.active = await this.getAll();
         const activeClass = new Class();
@@ -45,7 +54,7 @@ export class SymbolService {
     }
 
     /**
-     * getRegExClass
+     * Check if the document has a class.
      */
     private classExist() {
         const start = new Position(0, 0);

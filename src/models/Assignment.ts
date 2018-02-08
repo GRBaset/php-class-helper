@@ -4,7 +4,9 @@ import { Constructor } from "./Constructor";
 import { VariableAdder } from "./VariableAdder";
 
 export class Assignment {
-
+    /**
+     * add an assignment
+     */
     public add(): [Position, string] {
         const text = "\t$this->" + VariableAdder.placeholder + " = $" + VariableAdder.placeholder + ";\n\t";
 

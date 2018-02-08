@@ -6,6 +6,9 @@ import { Method } from "./Method";
 import { Property } from "./Property";
 
 export class GetterAndSetterAdder {
+    /**
+     * Add getters and setters
+     */
     public static async add(property: SymbolInformation) {
 
         const method = new Method();
@@ -14,6 +17,9 @@ export class GetterAndSetterAdder {
 
         let position: Position;
 
+        /**
+         * get the constructor and last property to use its location to add a getter or setter
+         */
         const construct = new Constructor();
         const cons = construct.get();
 

@@ -8,7 +8,7 @@ import { Property } from "./Property";
 
 export class Constructor {
     /**
-     * active constructor
+     * Active constructor of a class
      */
     public static active: SymbolInformation;
 
@@ -16,7 +16,7 @@ export class Constructor {
         this.get();
     }
     /**
-     * getConstructor
+     * Get constructor of an active class
      */
     public get(): SymbolInformation {
         Constructor.active = SymbolService.getSymbolsInSymbol(Class.active).find((classSymbol) => {
@@ -26,6 +26,9 @@ export class Constructor {
         return Constructor.active;
     }
 
+    /**
+     * Add a consturctor
+     */
     public add(): void {
         let text = "\n\tpublic function __construct()\n\t{\n\t}";
         const property = new Property();

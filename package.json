@@ -55,9 +55,24 @@
                 "when": "editorTextFocus && editorLangId == php"
             },
             {
+                "command": "php-class-helper.addMehtod",
+                "key": "alt+m",
+                "when": "editorTextFocus && editorLangId == javascript"
+            },
+            {
+                "command": "php-class-helper.addMehtod",
+                "key": "alt+m",
+                "when": "editorTextFocus && editorLangId == typescript"
+            },
+            {
                 "command": "php-class-helper.addPrivateMehtod",
                 "key": "ctrl+alt+m",
                 "when": "editorTextFocus && editorLangId == php"
+            },
+            {
+                "command": "php-class-helper.addPrivateMehtod",
+                "key": "ctrl+alt+m",
+                "when": "editorTextFocus && editorLangId == typescript"
             }
         ],
         "configuration": [

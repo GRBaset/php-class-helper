@@ -20,8 +20,7 @@ export class Method {
      * Add a method snippet
      */
     public add(isPrivate = false): void {
-        const visibility = isPrivate ? "\tprivate" : "\tpublic";
-        let text = visibility + " function ${1:functionName}($2) \n\t{\n\t\t${3://not implemented}\n\t}$0\n";
+        let text = ClassHelper.language.getMethodText(isPrivate);
 
         const firstPrivateMetod = this.getFirstPrivate();
         let position;
@@ -45,7 +44,13 @@ export class Method {
      * Generate a text snippet to later add to a document
      */
     public getGetterOrSetterSnippet(property: SymbolInformation, type: METHOD_TYPE): string {
-        const propName = property.name.slice(1);
+        let propName;
+        if (ClassHelper.document.languageId === "php") {
+            // slice the $ out of the name
+            propName = property.name.slice(1);
+        } else {
+            propName = property.name;
+        }
         let functionName: string;
         let text: string;
 
@@ -86,7 +91,7 @@ export class Method {
             .filter((symbol) => {
                 if (symbol.kind === SymbolKind.Method) {
                     const { range } = symbol.location;
-                    return FindService.findRegExInRange(/\s*private\s*function/, range);
+                    return FindService.findRegExInRange(/\s*private\s*/, range);
                 }
             }).shift();
     }

@@ -1,8 +1,6 @@
 import { Position } from "vscode";
-import { Command } from "../Command";
+import { ClassHelper } from "../ClassHelper";
 import { scrollIntoView } from "../helpers";
-import { FindService } from "../services/FindService";
-import { SymbolService } from "../services/SymbolService";
 import { Argument } from "./Argument";
 import { Assignment } from "./Assignment";
 import { Class } from "./Class";
@@ -31,7 +29,7 @@ export class VariableAdder {
         const asn = new Assignment();
         const assigment: [Position, string] = asn.add();
 
-        await Command.editor.edit((edit) => {
+        await ClassHelper.editor.edit((edit) => {
             edit.insert(property[0], property[1]);
             edit.insert(argument[0], argument[1]);
             edit.insert(assigment[0], assigment[1]);

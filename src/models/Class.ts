@@ -1,5 +1,5 @@
-import { Position, SnippetString, SymbolInformation, SymbolKind } from "vscode";
-import { Command } from "../Command";
+import { SnippetString, SymbolInformation, SymbolKind } from "vscode";
+import { ClassHelper } from "../ClassHelper";
 import { scrollIntoView } from "../helpers";
 import { SymbolService } from "../services/SymbolService";
 
@@ -21,7 +21,7 @@ export class Class {
             .filter((symbol) => symbol.kind === SymbolKind.Class)
             .find((classSymbol) => {
                 const { start, end } = classSymbol.location.range;
-                return start.isBefore(Command.cursor) && end.isAfter(Command.cursor);
+                return start.isBefore(ClassHelper.cursor) && end.isAfter(ClassHelper.cursor);
             });
 
         return Class.active;
@@ -29,8 +29,8 @@ export class Class {
 
     public add(): void {
         const snippet = new SnippetString("class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0");
-        Command.editor.insertSnippet(snippet, Command.cursor);
+        ClassHelper.editor.insertSnippet(snippet, ClassHelper.cursor);
 
-        scrollIntoView(Command.cursor);
+        scrollIntoView(ClassHelper.cursor);
     }
 }

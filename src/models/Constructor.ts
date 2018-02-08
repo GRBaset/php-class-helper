@@ -1,5 +1,5 @@
 import { Position, SymbolInformation, SymbolKind } from "vscode";
-import { Command } from "../Command";
+import { ClassHelper } from "../ClassHelper";
 import { empty, scrollIntoView } from "../helpers";
 import { FindService } from "./../services/FindService";
 import { SymbolService } from "./../services/SymbolService";
@@ -48,7 +48,7 @@ export class Constructor {
             );
         }
 
-        Command.editor.edit((edit) => {
+        ClassHelper.editor.edit((edit) => {
             edit.insert(position, text);
         });
 

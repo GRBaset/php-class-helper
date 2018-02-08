@@ -1,4 +1,5 @@
 import { Position, SymbolInformation, SymbolKind, workspace } from "vscode";
+import { ClassHelper } from "../ClassHelper";
 import { empty } from "../helpers";
 import { FindService } from "../services/FindService";
 import { SymbolService } from "./../services/SymbolService";
@@ -50,12 +51,16 @@ export class Property {
     /**
      * getPropertyUnderCursor
      */
-    private getPropertyAtPosition(position: Position): SymbolInformation {
+    public getByCursorPosition(): SymbolInformation {
         return this.getAll().find((property) => {
             const { start, end } = property.location.range;
 
-            return start.isBeforeOrEqual(position) && end.isAfterOrEqual(position);
+            return start.isBeforeOrEqual(ClassHelper.cursor) && end.isAfterOrEqual(ClassHelper.cursor);
         });
+    }
+
+    public getlast() {
+        return this.getAll().pop().location.range.end;
     }
 
     private loadSettings() {

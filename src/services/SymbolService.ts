@@ -1,8 +1,8 @@
-import { commands, Position, Range, SymbolInformation, SymbolKind, TextDocument } from "vscode";
-import { Command } from "../Command";
+import { commands, Position, Range, SymbolInformation, SymbolKind } from "vscode";
+import { ClassHelper } from "../ClassHelper";
 import { Class } from "../models/Class";
 import { Constructor } from "../models/Constructor";
-import { empty, has, uppercaseFirst } from "./../helpers";
+import { empty, has } from "./../helpers";
 import { FindService } from "./FindService";
 
 export class SymbolService {
@@ -23,7 +23,7 @@ export class SymbolService {
         });
     }
 
-    public async ready() {
+    public async isReady() {
         SymbolService.active = await this.getAll();
         const classExist = this.classExist();
 
@@ -34,7 +34,7 @@ export class SymbolService {
      */
     public getAll() {
         return commands.executeCommand<SymbolInformation[]>("vscode.executeDocumentSymbolProvider",
-            Command.editor.document.uri
+            ClassHelper.editor.document.uri
         );
     }
 
@@ -50,7 +50,7 @@ export class SymbolService {
     private classExist() {
         const start = new Position(0, 0);
         const end = new Position(
-            Command.editor.document.lineCount - 1,
+            ClassHelper.editor.document.lineCount - 1,
             0
         );
         const range = new Range(start, end);

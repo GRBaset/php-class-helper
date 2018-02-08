@@ -1,5 +1,5 @@
 import { Position, Selection } from "vscode";
-import { Command } from "../Command";
+import { ClassHelper } from "../ClassHelper";
 import { FindService } from "../services/FindService";
 import { Class } from "./Class";
 import { VariableAdder } from "./VariableAdder";
@@ -37,6 +37,6 @@ export class SelectionRange {
 
     public static multipleSelect() {
         SelectionRange.selections = SelectionRange.getSelections();
-        Command.editor.selections = SelectionRange.selections;
+        ClassHelper.editor.selections = SelectionRange.selections;
     }
 }

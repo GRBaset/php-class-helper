@@ -1,5 +1,5 @@
 import { Position, Range, TextEditor, TextEditorRevealType } from "vscode";
-import { Command } from "./Command";
+import { ClassHelper } from "./ClassHelper";
 
 export function empty(collection: any[]) {
     return !collection.length;
@@ -15,5 +15,5 @@ export function uppercaseFirst(word: string) {
 
 export function scrollIntoView(position: Position) {
     const range = new Range(position, position);
-    Command.editor.revealRange(range, TextEditorRevealType.InCenter);
+    ClassHelper.editor.revealRange(range, TextEditorRevealType.InCenter);
 }

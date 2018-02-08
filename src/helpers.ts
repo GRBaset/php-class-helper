@@ -1,4 +1,4 @@
-import { Position, Range, TextEditor, TextEditorRevealType } from "vscode";
+import { Position, Range, TextEditorRevealType } from "vscode";
 import { ClassHelper } from "./ClassHelper";
 
 export function empty(collection: any[]) {

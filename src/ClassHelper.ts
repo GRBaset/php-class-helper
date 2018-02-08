@@ -40,7 +40,7 @@ export class ClassHelper {
         const properties = new Property();
         const property: SymbolInformation = properties.getByCursorPosition();
 
-        if (property) {
+        if (property && ClassHelper.language.supports.properties) {
             await GetterAndSetterAdder.add(property);
             return;
         }

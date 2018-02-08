@@ -2,9 +2,10 @@ import { SnippetString } from "vscode";
 import { Property } from "../models/Property";
 import { VariableAdder } from "../models/VariableAdder";
 import { Language } from "./intefaces/Language";
+import { Support } from "./intefaces/Support";
 
 export class Php implements Language {
-    public supportsProperties = true;
+    public supports: Support;
 
     public classSnippet = new SnippetString("class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0");
 
@@ -17,4 +18,10 @@ export class Php implements Language {
     public assignmentText = "\t$this->" + VariableAdder.placeholder +
         this.assignmentEqualSign +
         VariableAdder.placeholder + ";\n\t";
+
+    constructor() {
+        this.supports = new Support();
+        this.supports.setVisibilty(true);
+        this.supports.setProperties(true);
+    }
 }

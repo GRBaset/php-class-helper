@@ -1,8 +1,9 @@
 import { SnippetString } from "vscode";
+import { Support } from "./Support";
 
 export interface Language {
 
-    supportsProperties: boolean;
+    supports: Support;
     classSnippet: SnippetString;
 
     constructorName: string;

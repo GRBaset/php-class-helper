@@ -25,7 +25,7 @@ export class VariableAdder {
         let prop: Property;
         let property: [Position, string];
 
-        if (ClassHelper.language.supportsProperties) {
+        if (ClassHelper.language.supports.properties) {
             prop = new Property();
             property = prop.add();
         }
@@ -37,7 +37,7 @@ export class VariableAdder {
         const assigment: [Position, string] = asn.add();
 
         await ClassHelper.editor.edit((edit) => {
-            if (ClassHelper.language.supportsProperties) {
+            if (ClassHelper.language.supports.properties) {
                 edit.insert(property[0], property[1]);
             }
             edit.insert(argument[0], argument[1]);

@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "php-class-helper" extension will be documented in this file.
 
+## [0.0.10]
+### Changed
+* Not much has changed, exept a huge refactor of the whole code. Expect some surprising things in the future ;) 
+
 ## [0.0.9]
 ### Added
 * Add getters and setters.

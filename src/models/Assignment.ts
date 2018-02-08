@@ -1,8 +1,8 @@
 import { Position } from "vscode";
+import { ClassHelper } from "../ClassHelper";
 import { FindService } from "../services/FindService";
 import { Constructor } from "./Constructor";
 import { VariableAdder } from "./VariableAdder";
-import { ClassHelper } from "../ClassHelper";
 
 export class Assignment {
     /**

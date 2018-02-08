@@ -1,10 +1,10 @@
 import { Position, Range, SymbolKind } from "vscode";
+import { ClassHelper } from "../ClassHelper";
 import { has } from "../helpers";
 import { FindService } from "../services/FindService";
 import { SymbolService } from "./../services/SymbolService";
 import { Constructor } from "./Constructor";
 import { VariableAdder } from "./VariableAdder";
-import { ClassHelper } from "../ClassHelper";
 
 export class Argument {
 

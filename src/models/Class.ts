@@ -31,7 +31,7 @@ export class Class {
      * Add a class snippet at the current cursor position
      */
     public add(): void {
-        const snippet = new SnippetString("class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0");
+        const snippet = ClassHelper.language.classSnippet;
         ClassHelper.editor.insertSnippet(snippet, ClassHelper.cursor);
 
         scrollIntoView(ClassHelper.cursor);

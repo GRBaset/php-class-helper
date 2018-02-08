@@ -39,7 +39,10 @@ export class SelectionRange {
         const lastSelection: Position = [...selectionPositions].pop();
         const propertySelection = new Position(
             lastSelection.line,
-            lastSelection.character + VariableAdder.placeholder.length + 4
+            lastSelection.character +
+            VariableAdder.placeholder.length +
+            // represents the length of " = " or " = $"
+            ClassHelper.language.assignmentEqualSign.length
         );
 
         selectionPositions.push(propertySelection);

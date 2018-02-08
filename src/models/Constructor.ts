@@ -20,7 +20,7 @@ export class Constructor {
      */
     public get(): SymbolInformation {
         Constructor.active = SymbolService.getSymbolsInSymbol(Class.active).find((classSymbol) => {
-            return classSymbol.kind === SymbolKind.Constructor;
+            return classSymbol.name === ClassHelper.language.constructorName;
         });
 
         return Constructor.active;
@@ -30,7 +30,7 @@ export class Constructor {
      * Add a consturctor
      */
     public add(): void {
-        let text = "\n\tpublic function __construct()\n\t{\n\t}";
+        let text = ClassHelper.language.constructorText;
         const property = new Property();
         const properties = property.getAll();
 

@@ -11,10 +11,14 @@
     },
     "icon": "resources/icon.png",
     "keywords": [
+        "javascript",
         "php",
+        "typescript",
         "constructor",
         "class",
-        "companion"
+        "companion",
+        "getters",
+        "setters"
     ],
     "engines": {
         "vscode": "^1.19.0"
@@ -23,7 +27,9 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:php"
+        "onLanguage:php",
+        "onLanguage:javascript",
+        "onLanguage:typescript"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -32,6 +38,16 @@
                 "command": "php-class-helper.run",
                 "key": "alt+c",
                 "when": "editorTextFocus && editorLangId == php"
+            },
+            {
+                "command": "php-class-helper.run",
+                "key": "alt+c",
+                "when": "editorTextFocus && editorLangId == javascript"
+            },
+            {
+                "command": "php-class-helper.run",
+                "key": "alt+c",
+                "when": "editorTextFocus && editorLangId == typescript"
             },
             {
                 "command": "php-class-helper.addMehtod",

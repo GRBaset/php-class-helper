@@ -13,7 +13,7 @@ export class Property {
      * protected
      * public
      */
-    private visibility: string;
+    public static visibility: string;
 
     constructor() {
         this.loadVisibilitySetting();
@@ -30,8 +30,7 @@ export class Property {
      * Add a property
      */
     public add(): [Position, string] {
-        const staticText = "\n\t" + this.visibility + " $";
-        let text = staticText + VariableAdder.placeholder + ";";
+        let text = ClassHelper.language.propertyText;
         const properties = this.getAll();
 
         let position;
@@ -77,6 +76,6 @@ export class Property {
      */
     private loadVisibilitySetting() {
         const config = workspace.getConfiguration("php-class-helper");
-        this.visibility = config.get("visibility", "private");
+        Property.visibility = config.get("visibility", "private");
     }
 }

@@ -22,8 +22,13 @@ export class VariableAdder {
      * Add properties, arguments, assigments to a class
      */
     public async add() {
-        const prop = new Property();
-        const property: [Position, string] = prop.add();
+        let prop: Property;
+        let property: [Position, string];
+
+        if (ClassHelper.language.supportsProperties) {
+            prop = new Property();
+            property = prop.add();
+        }
 
         const arg = new Argument();
         const argument: [Position, string] = arg.add();
@@ -32,11 +37,13 @@ export class VariableAdder {
         const assigment: [Position, string] = asn.add();
 
         await ClassHelper.editor.edit((edit) => {
-            edit.insert(property[0], property[1]);
+            if (ClassHelper.language.supportsProperties) {
+                edit.insert(property[0], property[1]);
+            }
             edit.insert(argument[0], argument[1]);
             edit.insert(assigment[0], assigment[1]);
         });
 
-        scrollIntoView(property[0]);
+        scrollIntoView(assigment[0]);
     }
 }

@@ -4,6 +4,7 @@ import { FindService } from "../services/FindService";
 import { SymbolService } from "./../services/SymbolService";
 import { Constructor } from "./Constructor";
 import { VariableAdder } from "./VariableAdder";
+import { ClassHelper } from "../ClassHelper";
 
 export class Argument {
 
@@ -24,7 +25,7 @@ export class Argument {
      * Add an attribute to a constructor
      */
     public add(): [Position, string] {
-        let text = "$" + VariableAdder.placeholder;
+        let text = ClassHelper.language.argumentText;
 
         const constructorRange = Constructor.active.location.range;
         const openingBracket = FindService.findCharacter("(", constructorRange, true);

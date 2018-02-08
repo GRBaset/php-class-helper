@@ -1,4 +1,6 @@
 import { Position, SymbolInformation, TextDocument, TextEditor, window } from "vscode";
+import { Language } from "./factory/intefaces/Language";
+import { LanguageFactory } from "./factory/LanguageFactory";
 import { Class } from "./models/Class";
 import { Constructor } from "./models/Constructor";
 import { GetterAndSetterAdder } from "./models/GetterAndSetterAdder";
@@ -13,11 +15,14 @@ export class ClassHelper {
     public static editor: TextEditor;
     public static cursor: Position;
     public static document: TextDocument;
+    public static language: Language;
 
     public async executeAddMethod(editor, cursor, isPrivate = false) {
         ClassHelper.editor = editor;
         ClassHelper.cursor = cursor;
         ClassHelper.document = editor.document;
+
+        ClassHelper.language = LanguageFactory.get(editor.document.languageId);
 
         const symbolService = new SymbolService();
         const ready = await symbolService.isReady();
@@ -49,6 +54,8 @@ export class ClassHelper {
         ClassHelper.cursor = cursor;
         ClassHelper.document = editor.document;
 
+        ClassHelper.language = LanguageFactory.get(editor.document.languageId);
+
         SelectionRange.clear();
 
         const symbolService = new SymbolService();
@@ -57,6 +64,8 @@ export class ClassHelper {
             window.showInformationMessage("PHP Class Helper - Pleas wait a couple of seconds");
             return;
         }
+
+        // console.log(SymbolService.active);
 
         const activeClass = new Class();
         if (!Class.active) {

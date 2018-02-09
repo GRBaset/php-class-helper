@@ -27,7 +27,8 @@ export class Php implements Language {
 
     public getMethodText(isPrivate) {
         const visibility = isPrivate ? "\tprivate" : "\tpublic";
-        const text = visibility + " function ${1:functionName}($2) \n\t{\n\t\t${3://not implemented}\n\t}$0\n";
+        const text = visibility +
+            " function ${1:functionName}($2) \n\t{\n\t\t${3:throw new Exception('Method not implemented');}\n\t}$0\n";
         return text;
     }
 

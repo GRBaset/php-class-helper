@@ -25,7 +25,7 @@ export class JavaScript implements Language {
     }
 
     public getMethodText(isPrivate: boolean) {
-        return "\t${1:functionName}($2) {\n\t\t${3://not implemented}\n\t}$0\n";
+        return "\t${1:functionName}($2) {\n\t\t${3:throw new Error(\"Method not implemented.\");}\n\t}$0\n";
     }
 
     public getGetterText(functionName: string, propertyName: string): string {

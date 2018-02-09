@@ -94,6 +94,10 @@ export class FindService {
                     (currentLine === range.start.line ? characterIndex + range.start.character : 0)
                     + characterIndex[0].length +
                     Number(ClassHelper.editor.options.tabSize) +
+                    // don't ask me why 100, but fixes typescript
+                    // multiline type declaration. Quick fix
+                    // The greater the number the better it is :D
+                    100 +
                     Number(ClassHelper.editor.options.tabSize)
                     - (includesBracket ? 1 : 0)
                 ));

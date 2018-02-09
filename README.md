@@ -31,7 +31,7 @@ TypeScript showcase:
 ![TypeScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/typescriptShowcase.gif)
 
 
-What does Class Helper do? 
+## What does Class Helper do? 
 * Add a class snippet if the cursor is out of the scope of another class.
 
 ![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/class.gif)

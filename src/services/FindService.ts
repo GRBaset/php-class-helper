@@ -1,7 +1,5 @@
 import { Position, Range, TextDocument } from "vscode";
 import { ClassHelper } from "../ClassHelper";
-import { log } from "util";
-import { start } from "repl";
 
 export class FindService {
 

@@ -1,8 +1,8 @@
+import { workspace } from "vscode";
 import { Property } from "../models/Property";
 import { VariableAdder } from "../models/VariableAdder";
 import { Support } from "./intefaces/Support";
 import { JavaScript } from "./JavaScript";
-import { workspace } from "vscode";
 
 export class TypeScript extends JavaScript {
     public supports: Support;

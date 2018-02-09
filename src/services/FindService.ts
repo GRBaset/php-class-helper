@@ -1,5 +1,7 @@
 import { Position, Range, TextDocument } from "vscode";
 import { ClassHelper } from "../ClassHelper";
+import { log } from "util";
+import { start } from "repl";
 
 export class FindService {
 
@@ -70,5 +72,41 @@ export class FindService {
             currentLine++;
         }
         return undefined;
+    }
+
+    public static findLastRegExInRange(regex: RegExp, range: Range): Position {
+        let characterIndex;
+        let currentLine = range.start.line;
+        const endLine = range.end.line;
+        const matches = [];
+        while (currentLine <= endLine) {
+            if (currentLine === range.start.line) {
+                characterIndex = ClassHelper.document.getText(new Range(range.start, range.end)).match(regex);
+                console.log(ClassHelper.document.getText(new Range(range.start, range.end)));
+            } else {
+                characterIndex = ClassHelper.document.lineAt(currentLine).text.match(regex);
+                console.log(ClassHelper.document.lineAt(currentLine).text);
+
+            }
+
+            let includesBracket;
+            if (ClassHelper.document.lineAt(currentLine).text.includes(")")) {
+                includesBracket = true;
+            }
+            if (characterIndex !== null) {
+                matches.push(new Position(
+                    currentLine,
+                    (currentLine === range.start.line ? characterIndex + range.start.character : 0)
+                    + characterIndex[0].length + Number(ClassHelper.editor.options.tabSize) + Number(ClassHelper.editor.options.tabSize)
+                    - (includesBracket ? 1 : 0)
+                ));
+            }
+
+            currentLine++;
+        }
+
+        console.log(matches);
+
+        return matches.pop();
     }
 }

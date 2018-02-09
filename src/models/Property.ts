@@ -13,10 +13,17 @@ export class Property {
      * protected
      * public
      */
-    public static visibility: string;
+    public static visibility: string = Property.loadVisibilitySetting();
+    /**
+     * Get visibilty setting
+     */
+    private static loadVisibilitySetting() {
+        const config = workspace.getConfiguration("php-class-helper");
+        return config.get("visibility", "private");
+    }
 
     constructor() {
-        this.loadVisibilitySetting();
+        Property.visibility = Property.loadVisibilitySetting();
     }
 
     /**
@@ -69,13 +76,5 @@ export class Property {
      */
     public getlast() {
         return this.getAll().pop().location.range.end;
-    }
-
-    /**
-     * Get visibilty setting
-     */
-    private loadVisibilitySetting() {
-        const config = workspace.getConfiguration("php-class-helper");
-        Property.visibility = config.get("visibility", "private");
     }
 }

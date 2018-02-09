@@ -1,5 +1,7 @@
 # PHP Class Helper
-Extension for Visual Studio Code.
+Extension for Visual Studio Code. 
+
+Be more productive in writing PHP, JavaScript and TypeScript code with a simple keybinding.
 
 ## NOTABLE CHANGES IN LATEST RELEASE
 * PHP Class Helper now supports:
@@ -64,6 +66,16 @@ TypeScript specific settings:
 
 }
 ```
+
+
+JavaScript showcase:
+
+![JavaScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/javascriptShowcase.gif)
+
+TypeScript showcase:
+
+![TypeScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/typescriptShowcase.gif)
+
 
 ## Known issues
 

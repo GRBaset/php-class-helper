@@ -11,7 +11,7 @@ Be more productive in writing PHP, JavaScript and TypeScript code with a simple 
 
 Because `PHP Class Helper` now supports multiple languages, in the future the name will be changed to simply `Class Helper`.
 
-For more info about the what can you do in JavaScript and TypeScript, see the ->[CHANGELOG](https://github.com/predragnikolic/php-class-helper/blob/master/CHANGELOG.md)<- file. 
+For more info about what can you do in JavaScript and TypeScript, see the [CHANGELOG](https://github.com/predragnikolic/php-class-helper/blob/master/CHANGELOG.md) file. 
 
 
 ## What does Class Helper do? 
@@ -67,6 +67,7 @@ TypeScript specific settings:
 }
 ```
 
+## Showcase
 
 JavaScript showcase:
 

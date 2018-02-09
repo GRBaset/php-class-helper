@@ -76,7 +76,7 @@ export class Argument {
         } else {
 
             const lastAttribute = FindService.findLastRegExInRange(
-                /([$A-Za-z0-9]\w*)/g,
+                /([$A-Za-z0-9:]\w*)/g,
                 new Range(openingBracket, closingBracket)
             );
 

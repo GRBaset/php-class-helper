@@ -2,11 +2,36 @@
 Extension for Visual Studio Code.
 
 ## NOTABLE CHANGES IN LATEST RELEASE
-- changed the default keybinding from `ctrl+alt+c` to simply `alt+c`.
+* PHP Class Helper now supports:
+    * PHP
+    * JavaScript `(NEW)`
+    * TypeScript `(NEW)`
 
-## Looking for a php companion? PHP Class Helper is the extension for you.
+Because `PHP Class Helper` now supports multiple languages, in the future the name will be changed to simply `Class Helper`.
 
-What does PHP Class Helper do? 
+Class helper in JavaScript allows you to add:
+* Classes
+* Constructor
+* Assign properties
+* Add methods
+
+JavaScript showcase:
+
+![JavaScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/javascriptShowcase.gif)
+
+Class helper in TypeScript allows you to add:
+* Classes
+* Constructor
+* Assign properties
+* Public and private methods
+* Getters and setters 
+
+TypeScript showcase:
+
+![TypeScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/typescriptShowcase.gif)
+
+
+What does Class Helper do? 
 * Add a class snippet if the cursor is out of the scope of another class.
 
 ![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/class.gif)
@@ -45,6 +70,17 @@ You can tweak the visibility of a property, the default value is `private`:
 ```javascript
 {
     "php-class-helper.visibility": "private"
+}
+```
+
+TypeScript specific settings:
+```javascript
+{
+    // Prefix method with the type declaration
+    "php-class-helper.typescript.method.prefixWithType": true,
+    // Prefix method with public or private keywords
+    "php-class-helper.typescript.method.prefixWithVisibility": true,
+
 }
 ```
 

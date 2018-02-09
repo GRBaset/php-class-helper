@@ -27,4 +27,12 @@ export class JavaScript implements Language {
     public getMethodText(isPrivate: boolean) {
         return "\t${1:functionName}($2) {\n\t\t${3:throw new Error(\"Method not implemented.\");}\n\t}$0\n";
     }
+
+    public getGetterText(functionName: string, propertyName: string): string {
+        return "The interface demands this method. Find a solution in future";
+    }
+
+    public getSetterText(functionName: string, propertyName: string): string {
+        return "The interface demands this method. Find a solution in future";
+    }
 }

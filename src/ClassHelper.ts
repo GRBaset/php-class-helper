@@ -65,8 +65,6 @@ export class ClassHelper {
             return;
         }
 
-        // console.log(SymbolService.active);
-
         const activeClass = new Class();
         if (!Class.active) {
             activeClass.add();

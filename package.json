@@ -83,6 +83,16 @@
                         "type": "string",
                         "default": "private",
                         "description": "Default visibility of a property"
+                    },
+                    "php-class-helper.typescript.method.prefixWithVisibility": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Prefix method with public or private keywords"
+                    },
+                    "php-class-helper.typescript.method.prefixWithType": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Prefix method with the type declaration"
                     }
                 }
             }

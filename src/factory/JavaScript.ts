@@ -27,14 +27,4 @@ export class JavaScript implements Language {
     public getMethodText(isPrivate: boolean) {
         return "\t${1:functionName}($2) {\n\t\t${3:throw new Error(\"Method not implemented.\");}\n\t}$0\n";
     }
-
-    public getGetterText(functionName: string, propertyName: string): string {
-        return `\tpublic ${functionName}() {\n\t\treturn this.${propertyName};\n\t}\n`;
-    }
-
-    public getSetterText(functionName: string, propertyName: string): string {
-        // tslint:disable-next-line:max-line-length
-        const text = `\n\tpublic ${functionName}(${propertyName}) {\n\t\tthis.${propertyName} = ${propertyName};\n\t}`;
-        return text;
-    }
 }

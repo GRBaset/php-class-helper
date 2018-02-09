@@ -9,30 +9,11 @@ Extension for Visual Studio Code.
 
 Because `PHP Class Helper` now supports multiple languages, in the future the name will be changed to simply `Class Helper`.
 
-Class helper in JavaScript allows you to add:
-* Classes
-* Constructor
-* Assign properties
-* Add methods
-
-JavaScript showcase:
-
-![JavaScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/javascriptShowcase.gif)
-
-Class helper in TypeScript allows you to add:
-* Classes
-* Constructor
-* Assign properties
-* Public and private methods
-* Getters and setters 
-
-TypeScript showcase:
-
-![TypeScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/typescriptShowcase.gif)
+For more info about the what can you do in JavaScript and TypeScript, see the ->[CHANGELOG](https://github.com/predragnikolic/php-class-helper/blob/master/CHANGELOG.md)<- file. 
 
 
 ## What does Class Helper do? 
-* Add a class snippet if the cursor is out of the scope of another class.
+* Add a class if the cursor is out of the scope of another class.
 
 ![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/class.gif)
 

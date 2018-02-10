@@ -72,7 +72,7 @@
         ],
         "configuration": [
             {
-                "title": "PHP Class helper Configuration options",
+                "title": "Class Helper",
                 "properties": {
                     "class-helper.php.property.visibility": {
                         "type": "string",

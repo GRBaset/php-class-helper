@@ -9,17 +9,17 @@ export function activate(context) {
 
     const classHelper = new ClassHelper();
 
-    const disposable = commands.registerTextEditorCommand("php-class-helper.addConstructor", (editor) => {
+    const disposable = commands.registerTextEditorCommand("class-helper.addConstructor", (editor) => {
         const cursor = editor.selection.active;
         classHelper.executeAddConstructor(editor, cursor);
     });
 
-    const disposable2 = commands.registerTextEditorCommand("php-class-helper.addMehtod", (editor) => {
+    const disposable2 = commands.registerTextEditorCommand("class-helper.addMehtod", (editor) => {
         const cursor = editor.selection.active;
         classHelper.executeAddMethod(editor, cursor);
     });
 
-    const disposable3 = commands.registerTextEditorCommand("php-class-helper.addPrivateMehtod", (editor) => {
+    const disposable3 = commands.registerTextEditorCommand("class-helper.addPrivateMehtod", (editor) => {
         const cursor = editor.selection.active;
         classHelper.executeAddMethod(editor, cursor, true);
     });

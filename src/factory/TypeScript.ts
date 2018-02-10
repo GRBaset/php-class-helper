@@ -64,7 +64,7 @@ export class TypeScript extends JavaScript {
     }
 
     private loadTypeScriptSetting() {
-        const config = workspace.getConfiguration("php-class-helper");
+        const config = workspace.getConfiguration("class-helper");
         this.config.prefixVisibility = config.get("ts.prefixVisibility");
         this.config.visibility = config.get("ts.property.visibility");
         this.config.prefixType = config.get("ts.method.prefixType");

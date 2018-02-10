@@ -9,11 +9,11 @@ export interface Language {
     constructorName: string;
     constructorText: string;
 
-    propertyText: string;
     assignmentEqualSign: string;
     argumentText: string;
     assignmentText: string;
 
+    getPropertyText(): string;
     getMethodText(isPrivate?: boolean): string;
     getGetterText(functionName: string, propertyName: string): string;
     getSetterText(functionName: string, propertyName: string): string;

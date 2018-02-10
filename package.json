@@ -2,7 +2,7 @@
     "name": "php-class-helper",
     "displayName": "PHP Class Helper",
     "description": "Be more productive in writing PHP, JavaScript and TypeScript code with a simple keybinding.",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "publisher": "predrag-nikolic",
     "homepage": "https://github.com/predragnikolic/php-class-helper",
     "repository": {
@@ -11,14 +11,9 @@
     },
     "icon": "resources/icon.png",
     "keywords": [
-        "javascript",
-        "php",
-        "typescript",
-        "constructor",
-        "class",
+        "class constructor",
         "companion",
-        "getters",
-        "setters"
+        "getters and setters"
     ],
     "engines": {
         "vscode": "^1.19.0"
@@ -84,12 +79,22 @@
                         "default": "private",
                         "description": "Default visibility of a property"
                     },
-                    "php-class-helper.typescript.method.prefixWithVisibility": {
+                    "php-class-helper.php.property.visibility": {
+                        "type": "string",
+                        "default": "protected",
+                        "description": "Php default property visibility"
+                    },
+                    "php-class-helper.ts.property.visibility": {
+                        "type": "string",
+                        "default": "protected",
+                        "description": "TypeScript default property visibility. Can be private, protected or public."
+                    },
+                    "php-class-helper.ts.prefixVisibility": {
                         "type": "boolean",
                         "default": true,
-                        "description": "Prefix method with public or private keywords"
+                        "description": "Prefix method and properties with public or private keywords"
                     },
-                    "php-class-helper.typescript.method.prefixWithType": {
+                    "php-class-helper.ts.method.prefixType": {
                         "type": "boolean",
                         "default": true,
                         "description": "Prefix method with the type declaration"

@@ -1,4 +1,4 @@
-import { SnippetString } from "vscode";
+import { SnippetString, workspace } from "vscode";
 import { Property } from "../models/Property";
 import { VariableAdder } from "../models/VariableAdder";
 import { Language } from "./intefaces/Language";
@@ -12,17 +12,30 @@ export class Php implements Language {
     public constructorName = "__construct";
     public constructorText = "\n\tpublic function __construct()\n\t{\n\t}";
 
-    public propertyText = "\n\t" + Property.visibility + " $" + VariableAdder.placeholder + ";";
     public argumentText = "$" + VariableAdder.placeholder;
     public assignmentEqualSign = " = $";
     public assignmentText = "\t$this->" + VariableAdder.placeholder +
         this.assignmentEqualSign +
         VariableAdder.placeholder + ";\n\t";
 
+    private config = {
+        visibility: "thisShouldNotShow"
+    };
+
     constructor() {
         this.supports = new Support();
         this.supports.setVisibilty(true);
         this.supports.setProperties(true);
+    }
+
+    public getPropertyText() {
+        this.loadPhpSetting();
+        const text = "\n\t" +
+            this.config.visibility +
+            " $" +
+            VariableAdder.placeholder
+            + ";";
+        return text;
     }
 
     public getMethodText(isPrivate) {
@@ -40,5 +53,10 @@ export class Php implements Language {
         // tslint:disable-next-line:max-line-length
         const text = `\n\tpublic function ${functionName}(\$${propertyName}) \n\t{\n\t\t\$this->${propertyName} = \$${propertyName};\n\t}`;
         return text;
+    }
+
+    private loadPhpSetting() {
+        const config = workspace.getConfiguration("php-class-helper");
+        this.config.visibility = config.get("php.property.visibility");
     }
 }

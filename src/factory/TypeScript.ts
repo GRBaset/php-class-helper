@@ -8,11 +8,11 @@ export class TypeScript extends JavaScript {
     public supports: Support;
 
     public constructorText = "\n\tconstructor() {\n\t}";
-    public propertyText = "\n\t" + Property.visibility + " " + VariableAdder.placeholder + ";";
 
     private config = {
         prefixType: true,
-        prefixVisibility: true
+        prefixVisibility: true,
+        visibility: "thisShouldNotShow"
     };
 
     constructor() {
@@ -20,6 +20,15 @@ export class TypeScript extends JavaScript {
         this.supports = new Support();
         this.supports.setVisibilty(true);
         this.supports.setProperties(true);
+    }
+
+    public getPropertyText() {
+        this.loadTypeScriptSetting();
+        const text = "\n\t" +
+            (this.config.prefixVisibility ? this.config.visibility + " " : "") +
+            VariableAdder.placeholder
+            + ";";
+        return text;
     }
 
     public getMethodText(isPrivate: boolean) {
@@ -56,7 +65,8 @@ export class TypeScript extends JavaScript {
 
     private loadTypeScriptSetting() {
         const config = workspace.getConfiguration("php-class-helper");
-        this.config.prefixType = config.get("typescript.method.prefixWithType");
-        this.config.prefixVisibility = config.get("typescript.method.prefixWithVisibility");
+        this.config.prefixVisibility = config.get("ts.prefixVisibility");
+        this.config.visibility = config.get("ts.property.visibility");
+        this.config.prefixType = config.get("ts.method.prefixType");
     }
 }

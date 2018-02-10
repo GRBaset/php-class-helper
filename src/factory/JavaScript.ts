@@ -11,7 +11,6 @@ export class JavaScript implements Language {
     public constructorName = "constructor";
     public constructorText = "\n\n\tconstructor() {\n\t}";
 
-    public propertyText = "";
     public argumentText = VariableAdder.placeholder;
     public assignmentEqualSign = " = ";
     public assignmentText = "\tthis." + VariableAdder.placeholder +
@@ -22,6 +21,10 @@ export class JavaScript implements Language {
         this.supports = new Support();
         this.supports.setVisibilty(false);
         this.supports.setProperties(false);
+    }
+
+    public getPropertyText() {
+        return "";
     }
 
     public getMethodText(isPrivate: boolean) {

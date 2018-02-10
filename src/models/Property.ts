@@ -7,24 +7,6 @@ import { Class } from "./Class";
 import { VariableAdder } from "./VariableAdder";
 
 export class Property {
-    /**
-     * Visibility of a property: Can be:
-     * private
-     * protected
-     * public
-     */
-    public static visibility: string = Property.loadVisibilitySetting();
-    /**
-     * Get visibilty setting
-     */
-    private static loadVisibilitySetting() {
-        const config = workspace.getConfiguration("php-class-helper");
-        return config.get("visibility", "private");
-    }
-
-    constructor() {
-        Property.visibility = Property.loadVisibilitySetting();
-    }
 
     /**
      * Get all propertise of the active class
@@ -37,7 +19,7 @@ export class Property {
      * Add a property
      */
     public add(): [Position, string] {
-        let text = ClassHelper.language.propertyText;
+        let text = ClassHelper.language.getPropertyText();
         const properties = this.getAll();
 
         let position;

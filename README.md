@@ -4,7 +4,7 @@ Extension for Visual Studio Code.
 Be more productive in writing PHP, JavaScript and TypeScript code with a simple keybinding.
 
 ## NOTABLE CHANGES IN LATEST RELEASE
-`PHP Class Helper` is now changed to simply `Class Helper`.
+`PHP Class Helper` is now renamed to simply `Class Helper`.
 
 * Class Helper supports:
     * PHP

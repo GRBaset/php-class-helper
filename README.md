@@ -5,7 +5,7 @@ Be more productive in writing PHP, JavaScript and TypeScript code with a simple 
 
 ## NOTABLE CHANGES IN LATEST RELEASE
 
-* `PHP Class Helper` is now renamed to `Class Helper`
+* `PHP Class Helper` is now renamed to `Class Helper`.
 * Added support for separated setting for PHP and TypeScript. 
 
 * Class Helper supports:

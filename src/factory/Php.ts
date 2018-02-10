@@ -56,7 +56,7 @@ export class Php implements Language {
     }
 
     private loadPhpSetting() {
-        const config = workspace.getConfiguration("class-helper");
+        const config = workspace.getConfiguration("php-class-helper");
         this.config.visibility = config.get("php.property.visibility");
     }
 }

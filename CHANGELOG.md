@@ -1,13 +1,10 @@
 # Change Log
-All notable changes to the "class-helper" extension will be documented in this file.
+All notable changes to the "php-class-helper" extension will be documented in this file.
 
-## [0.1.4] - PHP Class Helper is now named Class Helper
+## [0.1.5]
 
 ### Added
 * Separated setting for PHP and TypeScript. 
-
-### Changes
-* Updated the extension name to Class Helper.
 
 ## [0.1.10] - JavaScript and TypeScript support
 ### Added

@@ -1,8 +1,8 @@
 {
-    "name": "class-helper",
-    "displayName": "Class Helper",
+    "name": "php-class-helper",
+    "displayName": "PHP Class Helper",
     "description": "Be more productive in writing PHP, JavaScript and TypeScript code with a simple keybinding.",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "publisher": "predrag-nikolic",
     "homepage": "https://github.com/predragnikolic/php-class-helper",
     "repository": {
@@ -30,42 +30,42 @@
     "contributes": {
         "keybindings": [
             {
-                "command": "class-helper.run",
+                "command": "php-class-helper.addConstructor",
                 "key": "alt+c",
                 "when": "editorTextFocus && editorLangId == php"
             },
             {
-                "command": "class-helper.run",
+                "command": "php-class-helper.addConstructor",
                 "key": "alt+c",
                 "when": "editorTextFocus && editorLangId == javascript"
             },
             {
-                "command": "class-helper.run",
+                "command": "php-class-helper.addConstructor",
                 "key": "alt+c",
                 "when": "editorTextFocus && editorLangId == typescript"
             },
             {
-                "command": "class-helper.addMehtod",
+                "command": "php-class-helper.addMehtod",
                 "key": "alt+m",
                 "when": "editorTextFocus && editorLangId == php"
             },
             {
-                "command": "class-helper.addMehtod",
+                "command": "php-class-helper.addMehtod",
                 "key": "alt+m",
                 "when": "editorTextFocus && editorLangId == javascript"
             },
             {
-                "command": "class-helper.addMehtod",
+                "command": "php-class-helper.addMehtod",
                 "key": "alt+m",
                 "when": "editorTextFocus && editorLangId == typescript"
             },
             {
-                "command": "class-helper.addPrivateMehtod",
+                "command": "php-class-helper.addPrivateMehtod",
                 "key": "ctrl+alt+m",
                 "when": "editorTextFocus && editorLangId == php"
             },
             {
-                "command": "class-helper.addPrivateMehtod",
+                "command": "php-class-helper.addPrivateMehtod",
                 "key": "ctrl+alt+m",
                 "when": "editorTextFocus && editorLangId == typescript"
             }
@@ -74,7 +74,7 @@
             {
                 "title": "Class Helper",
                 "properties": {
-                    "class-helper.php.property.visibility": {
+                    "php-class-helper.php.property.visibility": {
                         "type": "string",
                         "default": "private",
                         "enum": [
@@ -84,12 +84,12 @@
                         ],
                         "description": "Php: default property visibility"
                     },
-                    "class-helper.ts.prefixVisibility": {
+                    "php-class-helper.ts.prefixVisibility": {
                         "type": "boolean",
                         "default": true,
                         "description": "TypeScript: prefix method and properties with public or private keywords"
                     },
-                    "class-helper.ts.property.visibility": {
+                    "php-class-helper.ts.property.visibility": {
                         "type": "string",
                         "default": "private",
                         "enum": [
@@ -99,7 +99,7 @@
                         ],
                         "description": "TypeScript: default property visibility"
                     },
-                    "class-helper.ts.method.prefixType": {
+                    "php-class-helper.ts.method.prefixType": {
                         "type": "boolean",
                         "default": true,
                         "description": "TypeScript: prefix method with the type declaration"

@@ -1,10 +1,11 @@
-# Class Helper
+# PHP Class Helper
 Extension for Visual Studio Code. 
 
 Be more productive in writing PHP, JavaScript and TypeScript code with a simple keybinding.
 
 ## NOTABLE CHANGES IN LATEST RELEASE
-`PHP Class Helper` is now renamed to simply `Class Helper`.
+
+* Separated setting for PHP and TypeScript. 
 
 * Class Helper supports:
     * PHP
@@ -54,7 +55,7 @@ PHP specific settings:
 ```javascript
 {
     // Php: default property visibility
-    "class-helper.php.property.visibility": "private",
+    "php-class-helper.php.property.visibility": "private",
 }
 ```
 
@@ -62,13 +63,13 @@ TypeScript specific settings:
 ```javascript
 {
     // TypeScript: prefix method and properties with public or private keywords
-    "class-helper.ts.prefixVisibility": true,
+    "php-class-helper.ts.prefixVisibility": true,
 
     // TypeScript: default property visibility
-    "class-helper.ts.property.visibility": "private",
+    "php-class-helper.ts.property.visibility": "private",
 
     // TypeScript: prefix method with the type declaration
-    "class-helper.ts.method.prefixType": true,
+    "php-class-helper.ts.method.prefixType": true,
 
 }
 ```

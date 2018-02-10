@@ -1,6 +1,6 @@
 {
-    "name": "php-class-helper",
-    "displayName": "PHP Class Helper",
+    "name": "class-helper",
+    "displayName": "Class Helper",
     "description": "Be more productive in writing PHP, JavaScript and TypeScript code with a simple keybinding.",
     "version": "0.1.3",
     "publisher": "predrag-nikolic",
@@ -30,42 +30,42 @@
     "contributes": {
         "keybindings": [
             {
-                "command": "php-class-helper.run",
+                "command": "class-helper.run",
                 "key": "alt+c",
                 "when": "editorTextFocus && editorLangId == php"
             },
             {
-                "command": "php-class-helper.run",
+                "command": "class-helper.run",
                 "key": "alt+c",
                 "when": "editorTextFocus && editorLangId == javascript"
             },
             {
-                "command": "php-class-helper.run",
+                "command": "class-helper.run",
                 "key": "alt+c",
                 "when": "editorTextFocus && editorLangId == typescript"
             },
             {
-                "command": "php-class-helper.addMehtod",
+                "command": "class-helper.addMehtod",
                 "key": "alt+m",
                 "when": "editorTextFocus && editorLangId == php"
             },
             {
-                "command": "php-class-helper.addMehtod",
+                "command": "class-helper.addMehtod",
                 "key": "alt+m",
                 "when": "editorTextFocus && editorLangId == javascript"
             },
             {
-                "command": "php-class-helper.addMehtod",
+                "command": "class-helper.addMehtod",
                 "key": "alt+m",
                 "when": "editorTextFocus && editorLangId == typescript"
             },
             {
-                "command": "php-class-helper.addPrivateMehtod",
+                "command": "class-helper.addPrivateMehtod",
                 "key": "ctrl+alt+m",
                 "when": "editorTextFocus && editorLangId == php"
             },
             {
-                "command": "php-class-helper.addPrivateMehtod",
+                "command": "class-helper.addPrivateMehtod",
                 "key": "ctrl+alt+m",
                 "when": "editorTextFocus && editorLangId == typescript"
             }
@@ -74,25 +74,25 @@
             {
                 "title": "PHP Class helper Configuration options",
                 "properties": {
-                    "php-class-helper.php.property.visibility": {
+                    "class-helper.php.property.visibility": {
                         "type": "string",
                         "default": "private",
-                        "description": "Php default property visibility"
+                        "description": "Php: default property visibility"
                     },
-                    "php-class-helper.ts.prefixVisibility": {
+                    "class-helper.ts.prefixVisibility": {
                         "type": "boolean",
                         "default": true,
-                        "description": "Prefix method and properties with public or private keywords"
+                        "description": "TypeScript: prefix method and properties with public or private keywords"
                     },
-                    "php-class-helper.ts.property.visibility": {
+                    "class-helper.ts.property.visibility": {
                         "type": "string",
                         "default": "private",
-                        "description": "TypeScript default property visibility. Can be private, protected or public."
+                        "description": "TypeScript: default property visibility"
                     },
-                    "php-class-helper.ts.method.prefixType": {
+                    "class-helper.ts.method.prefixType": {
                         "type": "boolean",
                         "default": true,
-                        "description": "Prefix method with the type declaration"
+                        "description": "TypeScript: prefix method with the type declaration"
                     }
                 }
             }

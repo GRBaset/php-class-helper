@@ -5,21 +5,21 @@ import { ClassHelper } from "./ClassHelper";
 export function activate(context) {
 
     // tslint:disable-next-line:no-console
-    console.log('Congratulations, your extension "php-class-helper" is now active!');
+    console.log('Congratulations, your extension "class-helper" is now active!');
 
     const classHelper = new ClassHelper();
 
-    const disposable = commands.registerTextEditorCommand("php-class-helper.run", (editor) => {
+    const disposable = commands.registerTextEditorCommand("class-helper.run", (editor) => {
         const cursor = editor.selection.active;
         classHelper.executeAddConstructor(editor, cursor);
     });
 
-    const disposable2 = commands.registerTextEditorCommand("php-class-helper.addMehtod", (editor) => {
+    const disposable2 = commands.registerTextEditorCommand("class-helper.addMehtod", (editor) => {
         const cursor = editor.selection.active;
         classHelper.executeAddMethod(editor, cursor);
     });
 
-    const disposable3 = commands.registerTextEditorCommand("php-class-helper.addPrivateMehtod", (editor) => {
+    const disposable3 = commands.registerTextEditorCommand("class-helper.addPrivateMehtod", (editor) => {
         const cursor = editor.selection.active;
         classHelper.executeAddMethod(editor, cursor, true);
     });

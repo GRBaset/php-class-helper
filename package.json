@@ -74,25 +74,20 @@
             {
                 "title": "PHP Class helper Configuration options",
                 "properties": {
-                    "php-class-helper.visibility": {
-                        "type": "string",
-                        "default": "private",
-                        "description": "Default visibility of a property"
-                    },
                     "php-class-helper.php.property.visibility": {
                         "type": "string",
-                        "default": "protected",
+                        "default": "private",
                         "description": "Php default property visibility"
-                    },
-                    "php-class-helper.ts.property.visibility": {
-                        "type": "string",
-                        "default": "protected",
-                        "description": "TypeScript default property visibility. Can be private, protected or public."
                     },
                     "php-class-helper.ts.prefixVisibility": {
                         "type": "boolean",
                         "default": true,
                         "description": "Prefix method and properties with public or private keywords"
+                    },
+                    "php-class-helper.ts.property.visibility": {
+                        "type": "string",
+                        "default": "private",
+                        "description": "TypeScript default property visibility. Can be private, protected or public."
                     },
                     "php-class-helper.ts.method.prefixType": {
                         "type": "boolean",

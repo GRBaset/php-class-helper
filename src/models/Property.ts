@@ -4,6 +4,7 @@ import { empty } from "../helpers";
 import { FindService } from "../services/FindService";
 import { SymbolService } from "./../services/SymbolService";
 import { Class } from "./Class";
+import { Constructor } from "./Constructor";
 import { VariableAdder } from "./VariableAdder";
 
 export class Property {
@@ -13,7 +14,12 @@ export class Property {
      */
     public getAll(): SymbolInformation[] {
         return SymbolService.getSymbolsInSymbol(Class.active)
-            .filter((symbol) => symbol.kind === SymbolKind.Property);
+            .filter((symbol) => {
+                return (symbol.kind === SymbolKind.Property
+                    // dont include typescript constructor property definition
+                    && !symbol.location.range.intersection(Constructor.active.location.range)
+                );
+            });
     }
     /**
      * Add a property

@@ -65,9 +65,6 @@ TypeScript specific settings:
 }
 ```
 
-## Known issues
-
-Needs a couple of second to start.
 
 ## Idea
 

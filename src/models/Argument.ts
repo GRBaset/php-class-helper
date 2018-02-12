@@ -75,7 +75,7 @@ export class Argument {
             }
         } else {
 
-            const lastAttribute = FindService.findLastRegExInRange(
+            const lastAttribute = FindService.findLastArgument(
                 /([$A-Za-z0-9:]\w*)/g,
                 new Range(openingBracket, closingBracket)
             );
@@ -96,7 +96,12 @@ export class Argument {
                     } else {
                         // else use the position of the found argument
                         // and append a comma
-                        text = ",\n\t\t" + text;
+                        text = "\n\t\t" + text;
+
+                        const endsWithComma = FindService.endsWithComma(lastAttribute.line);
+                        if (!endsWithComma) {
+                            text = "," + text;
+                        }
                     }
                 } else {
                     // constructor is multiline

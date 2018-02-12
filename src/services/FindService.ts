@@ -72,7 +72,7 @@ export class FindService {
         return undefined;
     }
 
-    public static findLastRegExInRange(regex: RegExp, range: Range): Position {
+    public static findLastArgument(regex: RegExp, range: Range): Position {
         let characterIndex;
         let currentLine = range.start.line;
         const endLine = range.end.line;
@@ -107,5 +107,10 @@ export class FindService {
         }
 
         return matches.pop();
+    }
+
+    public static endsWithComma(line): boolean {
+        const endsWithComma = /[$A-Za-z0-9:]\w*[,]\s*\)?$/.test(ClassHelper.document.lineAt(line).text);
+        return endsWithComma;
     }
 }

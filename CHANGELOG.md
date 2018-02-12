@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "php-class-helper" extension will be documented in this file.
 
+## [0.1.5]
+### Fixes (JavaScript and TypeScript ONLY)
+* Don't add a comma after argument if it ends with a comma.
+
 ## [0.1.4] Rename `PHP Class Helper` to `Class Helper`
 
 ### Added
@@ -24,21 +28,12 @@ Class helper in JavaScript allows you to add:
 * Assign properties
 * Add methods
 
-JavaScript showcase:
-
-![JavaScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/javascriptShowcase.gif)
-
 Class helper in TypeScript allows you to add:
 * Classes
 * Constructor
 * Assign properties
 * Public and private methods
 * Getters and setters 
-
-TypeScript showcase:
-
-![TypeScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/typescriptShowcase.gif)
-
 
 ## [0.0.10]
 ### Changed

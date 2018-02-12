@@ -1,20 +1,10 @@
-# Class Helper
-Extension for Visual Studio Code. 
+## Class Helper supports:
+* PHP
+* JavaScript 
+* TypeScript
 
-Be more productive in writing PHP, JavaScript and TypeScript code with a simple keybinding.
+![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/showcase.gif)
 
-## NOTABLE CHANGES IN LATEST RELEASE
-
-* `PHP Class Helper` is now renamed to `Class Helper`.
-* Added support for separated setting for PHP and TypeScript. 
-
-* Class Helper supports:
-    * PHP
-    * JavaScript `(NEW)`
-    * TypeScript `(NEW)`
-
-
-For more info about what can you do in JavaScript and TypeScript, see the [CHANGELOG](https://github.com/predragnikolic/php-class-helper/blob/master/CHANGELOG.md) file. 
 
 
 ## What does Class Helper do? 
@@ -75,17 +65,6 @@ TypeScript specific settings:
 }
 ```
 
-## Showcase
-
-JavaScript showcase:
-
-![JavaScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/javascriptShowcase.gif)
-
-TypeScript showcase:
-
-![TypeScript Showcase](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/typescriptShowcase.gif)
-
-
 ## Known issues
 
 Needs a couple of second to start.
@@ -94,4 +73,4 @@ Needs a couple of second to start.
 
 This extension is inspired by sublime [php companion](https://github.com/erichard/SublimePHPCompanion) package.
  
-Hope you like this :)
+Hope you like it :)

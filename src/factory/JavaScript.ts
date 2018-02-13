@@ -3,7 +3,7 @@ import { VariableAdder } from "../models/VariableAdder";
 import { Language } from "./intefaces/Language";
 import { Support } from "./intefaces/Support";
 
-export class JavaScript implements Language {
+export class JavaScript extends Language {
     public supports: Support;
 
     public classSnippet = new SnippetString("class ${1:$TM_FILENAME_BASE}$2 {\n\t$3\n}$0");
@@ -18,6 +18,7 @@ export class JavaScript implements Language {
         VariableAdder.placeholder + ";\n\t";
 
     constructor() {
+        super();
         this.supports = new Support();
         this.supports.setVisibilty(false);
         this.supports.setProperties(false);

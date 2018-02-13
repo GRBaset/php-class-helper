@@ -4,7 +4,7 @@ import { VariableAdder } from "../models/VariableAdder";
 import { Language } from "./intefaces/Language";
 import { Support } from "./intefaces/Support";
 
-export class Php implements Language {
+export class Php extends Language {
     public supports: Support;
 
     public classSnippet = new SnippetString("class ${1:$TM_FILENAME_BASE}$2 \n{\n\t$3\n}$0");
@@ -23,6 +23,7 @@ export class Php implements Language {
     };
 
     constructor() {
+        super();
         this.supports = new Support();
         this.supports.setVisibilty(true);
         this.supports.setProperties(true);

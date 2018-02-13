@@ -1,21 +1,21 @@
 import { SnippetString } from "vscode";
 import { Support } from "./Support";
 
-export interface Language {
+export abstract class Language {
 
-    supports: Support;
-    classSnippet: SnippetString;
+    public abstract supports: Support;
+    public abstract classSnippet: SnippetString;
 
-    constructorName: string;
-    constructorText: string;
+    public abstract constructorName: string;
+    public abstract constructorText: string;
 
-    assignmentEqualSign: string;
-    argumentText: string;
-    assignmentText: string;
+    public abstract assignmentEqualSign: string;
+    public abstract argumentText: string;
+    public abstract assignmentText: string;
 
-    getPropertyText(): string;
-    getMethodText(isPrivate?: boolean): string;
-    getGetterText(functionName: string, propertyName: string): string;
-    getSetterText(functionName: string, propertyName: string): string;
+    public abstract getPropertyText(): string;
+    public abstract getMethodText(isPrivate?: boolean): string;
+    public abstract getGetterText(functionName: string, propertyName: string): string;
+    public abstract getSetterText(functionName: string, propertyName: string): string;
     // getConstructor(symbolsInClass: SymbolInformation[]);
 }

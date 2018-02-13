@@ -91,7 +91,7 @@ export class Method {
             .filter((symbol) => {
                 if (symbol.kind === SymbolKind.Method) {
                     const { range } = symbol.location;
-                    return FindService.findRegExInRange(/\s*private\s*/, range);
+                    return FindService.findRegExInRange(/(\s*private\s*|\s*_\w*)/, range);
                 }
             }).shift();
     }

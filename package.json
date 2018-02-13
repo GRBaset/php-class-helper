@@ -32,42 +32,17 @@
             {
                 "command": "class-helper.addConstructor",
                 "key": "alt+c",
-                "when": "editorTextFocus && editorLangId == php"
-            },
-            {
-                "command": "class-helper.addConstructor",
-                "key": "alt+c",
-                "when": "editorTextFocus && editorLangId == javascript"
-            },
-            {
-                "command": "class-helper.addConstructor",
-                "key": "alt+c",
-                "when": "editorTextFocus && editorLangId == typescript"
+                "when": "editorTextFocus"
             },
             {
                 "command": "class-helper.addMehtod",
                 "key": "alt+m",
-                "when": "editorTextFocus && editorLangId == php"
-            },
-            {
-                "command": "class-helper.addMehtod",
-                "key": "alt+m",
-                "when": "editorTextFocus && editorLangId == javascript"
-            },
-            {
-                "command": "class-helper.addMehtod",
-                "key": "alt+m",
-                "when": "editorTextFocus && editorLangId == typescript"
+                "when": "editorTextFocus"
             },
             {
                 "command": "class-helper.addPrivateMehtod",
                 "key": "ctrl+alt+m",
-                "when": "editorTextFocus && editorLangId == php"
-            },
-            {
-                "command": "class-helper.addPrivateMehtod",
-                "key": "ctrl+alt+m",
-                "when": "editorTextFocus && editorLangId == typescript"
+                "when": "editorTextFocus"
             }
         ],
         "configuration": [

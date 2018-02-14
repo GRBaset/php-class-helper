@@ -61,7 +61,6 @@ TypeScript specific settings:
 
     // TypeScript: prefix method with the type declaration
     "class-helper.ts.method.prefixType": true,
-
 }
 ```
 

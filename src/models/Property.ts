@@ -15,10 +15,13 @@ export class Property {
     public getAll(): SymbolInformation[] {
         return SymbolService.getSymbolsInSymbol(Class.active)
             .filter((symbol) => {
-                return (symbol.kind === SymbolKind.Property
-                    // dont include typescript constructor property definition
-                    && !symbol.location.range.intersection(Constructor.active.location.range)
-                );
+                if (Constructor.active) {
+                    return (symbol.kind === SymbolKind.Property
+                        // dont include typescript constructor property definition
+                        && !symbol.location.range.intersection(Constructor.active.location.range)
+                    );
+                }
+                return symbol.kind === SymbolKind.Property;
             });
     }
     /**

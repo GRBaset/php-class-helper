@@ -1,7 +1,7 @@
 ## Class Helper supports:
-* PHP
 * JavaScript 
 * TypeScript
+* PHP (needs [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client) to work)
 
 ![Add Class](https://raw.githubusercontent.com/predragnikolic/php-class-helper/master/resources/gifs/showcase.gif)
 

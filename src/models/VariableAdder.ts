@@ -21,13 +21,13 @@ export class VariableAdder {
     /**
      * Add properties, arguments, assigments to a class
      */
-    public async add() {
+    public async add(isPrivate) {
         let prop: Property;
         let property: [Position, string];
 
         if (ClassHelper.language.supports.properties) {
             prop = new Property();
-            property = prop.add();
+            property = prop.add(isPrivate);
         }
 
         const arg = new Argument();

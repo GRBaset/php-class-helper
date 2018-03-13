@@ -27,8 +27,8 @@ export class Property {
     /**
      * Add a property
      */
-    public add(): [Position, string] {
-        let text = ClassHelper.language.getPropertyText();
+    public add(isPrivate): [Position, string] {
+        let text = ClassHelper.language.getPropertyText(isPrivate);
         const properties = this.getAll();
 
         let position;

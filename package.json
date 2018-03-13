@@ -2,7 +2,7 @@
     "name": "php-class-helper",
     "displayName": "Class Helper",
     "description": "Be more productive in writing PHP, JavaScript and TypeScript code with a simple keybinding.",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "publisher": "predrag-nikolic",
     "homepage": "https://github.com/predragnikolic/php-class-helper",
     "repository": {
@@ -32,6 +32,11 @@
             {
                 "command": "class-helper.addConstructor",
                 "key": "alt+c",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "class-helper.addPrivateProperties",
+                "key": "ctrl+alt+c",
                 "when": "editorTextFocus"
             },
             {

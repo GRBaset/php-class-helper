@@ -13,7 +13,7 @@ export abstract class Language {
     public abstract argumentText: string;
     public abstract assignmentText: string;
 
-    public abstract getPropertyText(): string;
+    public abstract getPropertyText(isPrivate?: boolean): string;
     public abstract getMethodText(isPrivate?: boolean): string;
     public abstract getGetterText(functionName: string, propertyName: string): string;
     public abstract getSetterText(functionName: string, propertyName: string): string;

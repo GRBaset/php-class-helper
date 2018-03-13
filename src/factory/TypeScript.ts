@@ -22,12 +22,15 @@ export class TypeScript extends JavaScript {
         this.supports.setProperties(true);
     }
 
-    public getPropertyText() {
+    public getPropertyText(isPrivate = false) {
         this.loadTypeScriptSetting();
-        const text = "\n\t" +
-            (this.config.prefixVisibility ? this.config.visibility + " " : "") +
-            VariableAdder.placeholder
-            + ";";
+        let text = "\n\t";
+
+        if (this.config.prefixVisibility) {
+            text += (isPrivate ? "private " : this.config.visibility + " ");
+        }
+        text += VariableAdder.placeholder + ";";
+
         return text;
     }
 

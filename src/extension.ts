@@ -14,6 +14,11 @@ export function activate(context) {
         classHelper.executeAddConstructor(editor, cursor);
     });
 
+    const disposable4 = commands.registerTextEditorCommand("class-helper.addPrivateProperties", (editor) => {
+        const cursor = editor.selection.active;
+        classHelper.executeAddConstructor(editor, cursor, true);
+    });
+
     const disposable2 = commands.registerTextEditorCommand("class-helper.addMehtod", (editor) => {
         const cursor = editor.selection.active;
         classHelper.executeAddMethod(editor, cursor);
@@ -28,6 +33,7 @@ export function activate(context) {
     context.subscriptions.push(disposable);
     context.subscriptions.push(disposable2);
     context.subscriptions.push(disposable3);
+    context.subscriptions.push(disposable4);
 }
 
 // tslint:disable-next-line:no-empty

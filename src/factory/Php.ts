@@ -29,10 +29,10 @@ export class Php extends Language {
         this.supports.setProperties(true);
     }
 
-    public getPropertyText() {
+    public getPropertyText(isPrivate = false) {
         this.loadPhpSetting();
         const text = "\n\t" +
-            this.config.visibility +
+            (isPrivate ? "private" : this.config.visibility) +
             " $" +
             VariableAdder.placeholder
             + ";";

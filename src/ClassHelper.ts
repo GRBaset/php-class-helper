@@ -49,7 +49,7 @@ export class ClassHelper {
         method.add(isPrivate);
     }
 
-    public async executeAddConstructor(editor: TextEditor, cursor: Position) {
+    public async executeAddConstructor(editor: TextEditor, cursor: Position, isPrivate = false) {
         ClassHelper.editor = editor;
         ClassHelper.cursor = cursor;
         ClassHelper.document = editor.document;
@@ -78,7 +78,7 @@ export class ClassHelper {
         }
 
         const variableAdder = new VariableAdder();
-        await variableAdder.add();
+        await variableAdder.add(isPrivate);
         await symbolService.update();
 
         SelectionRange.multipleSelect();

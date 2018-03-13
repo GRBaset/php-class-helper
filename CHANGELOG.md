@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "php-class-helper" extension will be documented in this file.
 
+## [0.1.8]
+### Added
+* Keybinding to add private properties.
+
 ## [0.1.5]
 ### Fixes (JavaScript and TypeScript ONLY)
 * Don't add a comma after argument if it ends with a comma.

@@ -1,3 +1,7 @@
+### NOTABLE CHANGES IN LATEST RELEASE
+#### Added:
+- Keybinding to add private properties. Default is `ctrl+alt+c`.
+
 ## Class Helper supports:
 * JavaScript 
 * TypeScript
@@ -34,7 +38,8 @@
 ## How do you do all of that?
 
 * The keybinding to add a class, constructor and properties is `alt+c`.
-* The keybinding to add a public method is `alt+m`.
+* The keybinding to add a private properties is `ctrl+alt+c`.
+* The keybinding to add a method is `alt+m`.
 * The keybinding to add a private method is `ctrl+alt+m`.
 * The keybinding to add a getter and setter is `alt+m`, and the cursor (not the mouse) must be above the property.
 
@@ -46,7 +51,7 @@ PHP specific settings:
 ```javascript
 {
     // Php: default property visibility
-    "class-helper.php.property.visibility": "private",
+    "class-helper.php.property.visibility": "public",
 }
 ```
 
@@ -57,7 +62,7 @@ TypeScript specific settings:
     "class-helper.ts.prefixVisibility": true,
 
     // TypeScript: default property visibility
-    "class-helper.ts.property.visibility": "private",
+    "class-helper.ts.property.visibility": "public",
 
     // TypeScript: prefix method with the type declaration
     "class-helper.ts.method.prefixType": true,

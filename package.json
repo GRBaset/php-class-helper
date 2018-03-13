@@ -56,7 +56,7 @@
                 "properties": {
                     "class-helper.php.property.visibility": {
                         "type": "string",
-                        "default": "private",
+                        "default": "public",
                         "enum": [
                             "private",
                             "protected",
@@ -71,7 +71,7 @@
                     },
                     "class-helper.ts.property.visibility": {
                         "type": "string",
-                        "default": "private",
+                        "default": "public",
                         "enum": [
                             "private",
                             "protected",

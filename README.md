@@ -1,6 +1,4 @@
-### NOTABLE CHANGES IN LATEST RELEASE
-#### Added:
-- Keybinding to add private properties. Default is `ctrl+alt+c`.
+# [UNMAINTAINED] 
 
 ## Class Helper supports:
 * JavaScript 
